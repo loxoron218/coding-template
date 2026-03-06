@@ -8,9 +8,13 @@ printf "y\nsh\n" | specify init --here --ai opencode
 # Copy template files from vibe-code-template and merge .opencode
 TEMP_DIR=$(mktemp -d)
 git clone https://github.com/loxoron218/vibe-code-template.git "$TEMP_DIR"
-cp "$TEMP_DIR"/AGENTS.md "$TEMP_DIR"/clippy.toml "$TEMP_DIR"/LICENSE "$TEMP_DIR"/rustfmt.toml .
+cp "$TEMP_DIR"/AGENTS.md "$TEMP_DIR"/clippy.toml "$TEMP_DIR"/LICENSE "$TEMP_DIR"/rustfmt.toml "$TEMP_DIR"/lints.toml .
 cp -r "$TEMP_DIR"/.opencode/. ./.opencode/
 rm -rf "$TEMP_DIR"
+
+# Add lints from lints.toml to Cargo.toml
+cat lints.toml >> Cargo.toml
+rm lints.toml
 
 # Merge opencode files to home 
 TARGET="/home/$(whoami)/.config/opencode"
