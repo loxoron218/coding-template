@@ -20,28 +20,26 @@ This script will:
 
 - **opencode Integration**: Pre-configured AI coding assistant with multiple model support
 - **spec-kit**: Project specification and planning tools
-- **Rust Tooling**: Pre-configured clippy and rustfmt for code quality and formatting
-- **Specialized Review Agents**:
+- **Rust Tooling**: Pre-configured clippy, rustfmt, and lints for code quality and formatting
+- **Specialized Review Agents** (`.opencode/agents/`):
+  - `git-review`: Git-focused code review
+  - `uncommitted-review`: General code quality review
+- **Slash Commands** (`.opencode/command/`):
   - `performance-review`: Analyzes code for performance bottlenecks and optimization opportunities
   - `security-review`: Identifies security vulnerabilities and best practice violations
   - `uncommitted-review`: General code quality review with focus on maintainability
-- **Development Skills**:
-  - `code-review-excellence`: Code review best practices and guidelines
-  - `karpathy-guidelines`: Behavioral guidelines to reduce common LLM coding mistakes
+- **Active Development Skills** (`.opencode/skills/`):
+  - `m10-performance`: Systematic performance optimization techniques
   - `sql-optimization-patterns`: Database query optimization strategies
-  - `frontend-design`: Create distinctive, production-grade frontend interfaces
-  - `gtk-ui-ux-engineer`: GTK/libadwaita UI/UX specialist for Linux desktop applications
-  - `performance-optimization`: Systematic performance optimization techniques for Python and Rust
-  - `senior-rust-practices`: Senior-level Rust development patterns and workspace design
-  - `skill-creator`: Guide for creating effective skills that extend Claude's capabilities
+- **Inactive Skills** (`docs/unused-skills/`): code-review-excellence, frontend-design, gtk-ui-ux-engineer, karpathy-guidelines, performance-optimization, senior-rust-practices, skill-creator
 
 ## Documentation
 
 Additional documentation is available in the `docs/` directory:
 
-- **docs/AGENTS.md**: Detailed descriptions of all available review agents and their capabilities
-- **docs/CLAUDE.md**: Claude AI integration documentation
-- **docs/skills/**: Development skill documentation and patterns
+- **docs/templates/AGENTS.md**: Agent configuration templates
+- **docs/templates/CLAUDE.md**: Claude AI integration templates
+- **docs/unused-skills/**: Skills that are available but not currently active
 
 ## Spec-Kit Slash Commands
 
@@ -75,40 +73,44 @@ The template includes pre-configured Rust development tools:
   - Uses 2024 style edition
   - Enables unstable features
 
+- **lints.toml**: Configures project-wide lints for additional code quality rules
+
 ## Project Structure
 
 ```
 .
 ├── .opencode/                                        # opencode AI assistant configuration
-│   ├── agent/                                        # Specialized review agents
+│   ├── agents/                                       # Specialized review agents
+│   │   ├── git-review.md                             # Git-focused code review
+│   │   └── uncommitted-review.md                     # General code quality review
+│   ├── command/                                      # Slash command implementations
 │   │   ├── performance-review.md                     # Performance-focused code review
 │   │   ├── security-review.md                        # Security-focused code review
 │   │   └── uncommitted-review.md                     # General code quality review
-│   ├── skills/                                       # Development skills and patterns
-│   │   ├── code-review-excellence/
-│   │   │   └── SKILL.md                              # Code review best practices
-│   │   ├── karpathy-guidelines/
-│   │   │   └── SKILL.md                              # Behavioral guidelines to reduce coding mistakes
+│   ├── skills/                                       # Active development skills
+│   │   ├── m10-performance/                          # Performance optimization skill
+│   │   │   ├── patterns/
+│   │   │   │   └── optimization-guide.md
+│   │   │   └── SKILL.md
 │   │   └── sql-optimization-patterns/
 │   │       └── SKILL.md                              # SQL query optimization
 │   └── opencode.json                                 # Main opencode configuration
-├── AGENTS.md                                         # Detailed descriptions of all available review agents
+├── AGENTS.md                                         # Agent configuration documentation
 ├── clippy.toml                                       # Rust linter configuration
-├── docs/                                             # Additional documentation
-│   ├── AGENTS.md                                     # Agent configuration documentation
-│   ├── CLAUDE.md                                     # Claude AI integration documentation
-│   └── skills/                                       # Development skill documentation
+├── docs/                                             # Documentation
+│   ├── templates/                                    # Template documentation
+│   │   ├── AGENTS.md                                 # Agent configuration templates
+│   │   └── CLAUDE.md                                 # Claude AI integration templates
+│   └── unused-skills/                                # Inactive/skipped skills
+│       ├── code-review-excellence/
 │       ├── frontend-design/
-│       │   └── SKILL.md                              # Frontend design patterns
 │       ├── gtk-ui-ux-engineer/
-│       │   └── SKILL.md                              # GTK/libadwaita UI/UX best practices
+│       ├── karpathy-guidelines/
 │       ├── performance-optimization/
-│       │   └── SKILL.md                              # Performance optimization techniques
 │       ├── senior-rust-practices/
-│       │   └── SKILL.md                              # Modern Rust patterns and practices
 │       └── skill-creator/
-│           └── SKILL.md                              # Skill creation guidelines
 ├── LICENSE                                           # Project license
+├── lints.toml                                        # Rust lints configuration
 ├── README.md                                         # This file
 ├── rustfmt.toml                                      # Rust formatter configuration
 └── start.sh                                          # Setup script
