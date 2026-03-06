@@ -1,11 +1,10 @@
 ---
-description: Reviews uncommitted changes for code quality issues
+description: Read-only git analysis agent
 mode: subagent
 hidden: true
 temperature: 0.1
 permission:
-  write:
-    "REVIEW*.md": allow
+  write: deny
   edit: deny
   bash:
     "git diff*": allow
