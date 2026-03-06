@@ -19,7 +19,8 @@ cp -r ./.opencode/. "$TARGET"
 rm -rf ./.opencode
 
 # Add specify to gitignore
-echo ".specify/" >> .gitignore
+echo ".specify/scripts" >> .gitignore
+echo ".specify/templates" >> .gitignore
 
 # Removes the script file after completion
 rm "$0"
