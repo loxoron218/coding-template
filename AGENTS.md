@@ -74,7 +74,6 @@ cargo bench         # Run benchmarks
 
 - **ONLY** write `.rs` files. NEVER use `.ui`, `.xml`, or `.blp` files
 - Maximum 400 lines per `.rs` file
-- Follow `rustfmt.toml` and `clippy.toml` strictly
 - NEVER commit with clippy warnings
 - NEVER use `#[allow(clippy::xyz)]` attributes
 - NEVER write unsafe code
@@ -95,9 +94,8 @@ cargo bench         # Run benchmarks
 - NEVER leak `anyhow::Error` across library boundaries
 - NEVER use `let _`, `.unwrap()`, `.expect()` or `.ok()`, return errors with context instead
 - NEVER use `println!`, `eprintln!`, or `dbg!` for output
-- ALWAYS use structured `tracing` with fields (e.g., `error!(error = %err, "Audio stream error")`, `info!(message = %err_str, "Audio buffer size changed")`)
-- Document error types with summary comment
-- Document each variant/field with `///`
+- ALWAYS use structured `tracing` with fields (e.g., `error!(error = %err, "Audio stream error")`)
+- Document error types with summary comment and each variant with `///`
 
 **Example:**
 ```rust
