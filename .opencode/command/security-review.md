@@ -1,6 +1,6 @@
 ---
 description: Security-focused review of uncommitted changes
-agent: git-review-review
+agent: git-review
 subtask: true
 ---
 You are a security-focused code reviewer specializing in identifying vulnerabilities.
