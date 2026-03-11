@@ -3,6 +3,7 @@
 # missing_asserts_for_indexing = "deny"
 # redundant_test_prefix = "deny"
 # unused_trait_names = "deny"
+arbitrary-source-item-ordering = "deny"
 as_ptr_cast_mut = "deny"
 assertions_on_result_states = "deny"
 debug_assert_with_mut_call = "deny"
