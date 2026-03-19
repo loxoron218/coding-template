@@ -27,21 +27,34 @@ Prioritize in order unless evidence suggests otherwise:
    - String allocation in hot loops (use &str/Cow)
    - Multiple reallocations vs single pre-allocation
    - SmallVec/tinyvec for small collections
+   - Auto-cloning inside loops `.map(|x| x.clone)`, prefer `.cloned()`/`.copied()` at end of iterator
+   - Cloning large data structures like `Vec<T>` or `HashMap<K, V>`
+   - Using `or`/`map_or`/`unwrap_or`/`ok_or` instead of `_else` variants (allocates)
+   - Prefer `&[T]` over `Vec<T>` or `&Vec<T>`, `&str`/`&String` over `String`, `&T` over `T`
 
-4. **Avoid Unnecessary Work**
+4. **Copy Types**
+   - Declare `Copy` when: all fields are Copy, struct is small (≤24 bytes), represents plain data without ownership
+
+5. **Iterator vs `for` Loops**
+   - Prefer `for` when: need early exits, simple side-effects, readability matters
+   - Prefer iterators when: transforming collections, composing steps, need `.enumerate()`/`.windows()`/`.chunks()`
+   - Prefer `.sum()` over `.fold()` for summing numbers (compiler optimizations)
+   - Prefer `iter` over `into_iter` unless ownership needed, especially for `Copy` types
+
+6. **Avoid Unnecessary Work**
    - Missing fast paths for common cases
    - Loop-invariant code not hoisted
    - Expensive computations not deferred
    - Cache misses on repeated computations
 
-5. **Async & Concurrency**
+7. **Async & Concurrency**
    - Sequential operations where concurrent possible
    - Excessive tokio task spawning for small operations
    - Missing async-channel batch operations
    - Lock contention in concurrent code
    - Blocking I/O in async contexts
 
-6. **Tokio & Runtime**
+8. **Tokio & Runtime**
    - Too many small tasks (runtime overhead)
    - Unnecessary async/await where sync is faster
    - Missing bounded concurrency (buffer_unordered)
