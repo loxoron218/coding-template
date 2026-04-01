@@ -93,7 +93,8 @@ The template includes pre-configured Rust development tools:
 ├── clippy.toml                                       # Rust linter configuration
 ├── docs/                                             # Documentation
 │   ├── resources/                                    # Coding references
-│   │   └── rust-performance-optimization.md          # Rust performance optimization guide 
+│   │   └── rust-performance-optimization.md          # Rust performance optimization guide
+│   │   └── writing-a-good-claude.md                  # Guide on how to write AGENTS.md file
 │   ├── templates/                                    # Template documentation
 │   │   ├── AGENTS.md                                 # Agent configuration templates
 │   │   └── CLAUDE.md                                 # Claude AI integration templates
