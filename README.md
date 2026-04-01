@@ -22,11 +22,8 @@ This script will:
 - **spec-kit**: Project specification and planning tools
 - **Rust Tooling**: Pre-configured clippy, rustfmt, and lints for code quality and formatting
 - **Specialized Review Agents** (`.opencode/agents/`):
-  - `git-review`: Git-focused code review
   - `uncommitted-review`: General code quality review
 - **Slash Commands** (`.opencode/command/`):
-  - `performance-review`: Analyzes code for performance bottlenecks and optimization opportunities
-  - `security-review`: Identifies security vulnerabilities and best practice violations
   - `uncommitted-review`: General code quality review with focus on maintainability
 - **Active Development Skills** (`.opencode/skills/`):
   - `m10-performance`: Systematic performance optimization techniques
@@ -81,11 +78,8 @@ The template includes pre-configured Rust development tools:
 .
 ├── .opencode/                                        # opencode AI assistant configuration
 │   ├── agents/                                       # Specialized review agents
-│   │   ├── git-review.md                             # Git-focused code review
 │   │   └── uncommitted-review.md                     # General code quality review
 │   ├── command/                                      # Slash command implementations
-│   │   ├── performance-review.md                     # Performance-focused code review
-│   │   ├── security-review.md                        # Security-focused code review
 │   │   └── uncommitted-review.md                     # General code quality review
 │   ├── skills/                                       # Active development skills
 │   │   ├── m10-performance/                          # Performance optimization skill
@@ -98,6 +92,8 @@ The template includes pre-configured Rust development tools:
 ├── AGENTS.md                                         # Agent configuration documentation
 ├── clippy.toml                                       # Rust linter configuration
 ├── docs/                                             # Documentation
+│   ├── resources/                                    # Coding references
+│   │   └── rust-performance-optimization.md          # Rust performance optimization guide 
 │   ├── templates/                                    # Template documentation
 │   │   ├── AGENTS.md                                 # Agent configuration templates
 │   │   └── CLAUDE.md                                 # Claude AI integration templates
