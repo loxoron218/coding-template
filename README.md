@@ -1,4 +1,4 @@
-# Vibe Code Template
+# Coding Template
 
 A modern project template for building applications with opencode AI assistance and spec-kit specification tools.
 
@@ -7,7 +7,7 @@ A modern project template for building applications with opencode AI assistance 
 Download and initialize the template:
 
 ```bash
-curl -L https://raw.githubusercontent.com/loxoron218/vibe-code-template/refs/heads/main/start.sh -o start.sh && chmod +x start.sh && ./start.sh
+curl -L https://raw.githubusercontent.com/loxoron218/coding-template/refs/heads/main/start.sh -o start.sh && chmod +x start.sh && ./start.sh
 ```
 
 This script will:
