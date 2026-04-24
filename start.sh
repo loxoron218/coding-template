@@ -3,7 +3,7 @@ cargo init
 
 # Install CLI and init
 uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
-printf "y\nsh\n" | specify init --here --ai opencode
+printf "y\nsh\n" | specify init --here --integration opencode
 
 # Copy template files from vibe-code-template and merge .opencode
 TEMP_DIR=$(mktemp -d)
