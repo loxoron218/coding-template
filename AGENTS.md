@@ -16,28 +16,28 @@ You are a senior developer using high-performing, modern and idiomatic Rust and 
 ## Tech Stack
 
 **Concurrency:**
-- `tokio` - Async runtime
 - `async-channel` - Async channels
+- `crossbeam` - Concurrent data structures
 - `dynosaur` - Dynamic trait objects
 - `parking-lot` - High-performance locks
 - `rayon` - Data parallelism
-- `crossbeam` - Concurrent data structures
-
-**Data & Persistence:**
-- `sqlx` - Database (SQLite)
-- `serde` + `serde_json` - Serialization (XDG paths)
+- `tokio` - Async runtime
+- `tokio-stream` - Stream utilities
+- `tokio-util` - Async IO utilities
 
 **UI:**
 - `libadwaita` - UI (Programmatic widgets only)
 
 **Utilities:**
-- `notify` - File watching for library scanning
-- `regex` - Regular expressions 
-- `thiserror` - Domain error types
 - `anyhow` - Operational error context
 - `criterion` - Benchmarking
+- `notify` - File watching for library scanning
+- `regex` - Regular expressions 
+- `serde` + `serde_json` - Serialization (XDG paths)
+- `sqlx` - Database (SQLite)
 - `tempfile` - Test fixtures
-- `tracing` + `tracing-subscriber` - Observability
+- `thiserror` - Domain error types
+- `tracing` + `tracing-subscriber` + `tracing-appender` - Observability
 
 ## File Structure
 
@@ -130,11 +130,6 @@ pub enum AudioError {
 
 **Public items:** Use `///` for documentation
 
-**Inline comments:** Use `//` inside function bodies to explain:
-- Complex logic
-- Edge cases
-- Specific implementation choices
-
 **Function docs:** Include at minimum (if applicable):
 - `# Arguments`
 - `# Returns`
@@ -160,7 +155,7 @@ pub async fn load_track<P: AsRef<Path>>(&self, track_path: P) -> Result<(), Audi
 - Preferences: Use `PreferencesDialog` with `PreferencesPage`, `PreferencesGroup`, and appropriate row types (`ActionRow`, `SwitchRow`, `ComboRow`, `EntryRow`, `PasswordEntryRow`, `SpinRow`)
 - Accessibility: `widget.accessible_update_property(AccessibleProperty::Label, value)` for labels, `widget.set_can_focus(true)` for keyboard navigation, `widget.set_tooltip_text("text")` for tooltips, `widget.set_use_underline(true)` for mnemonics
 - Feedback: `Toast`, "suggested-action"/"destructive-action"
-- Responsiveness: `Leaflet`, `Breakpoint`
+- Responsiveness: `AdwBreakpoint` (declarative breakpoints), `AdwNavigationSplitView` + `AdwNavigationView` (sidebar/collapsible panes), `AdwOverlaySplitView` (overlay sidebars), `AdwViewSwitcher` + `AdwViewSwitcherBar` (flat tab navigation)
 - Motion: 200ms ease transitions
 - Spacing: 6px scale (6/12/18/24/30px)
 - Radii: NEVER hardcoded
@@ -172,5 +167,4 @@ pub async fn load_track<P: AsRef<Path>>(&self, track_path: P) -> Result<(), Audi
 - Run tests and ensure they pass before committing code
 
 **NEVER DO:**
-- Remove any existing documentation or comments that are still applicable and relevant
 - Hardcode values that should be configurable
