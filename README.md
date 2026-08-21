@@ -28,12 +28,13 @@ This script will:
 - **Active Development Skills** (`.opencode/skills/`):
   - `m10-performance`: Systematic performance optimization techniques
   - `sql-optimization-patterns`: Database query optimization strategies
-- **Inactive Skills** (`docs/unused-skills/`): code-review-excellence, frontend-design, gtk-ui-ux-engineer, karpathy-guidelines, performance-optimization, senior-rust-practices, skill-creator
+- **Inactive Skills** (`docs/unused-skills/`): code-review-excellence, frontend-design, gtk-ui-ux-engineer, karpathy-guidelines, performance-optimization, rust-best-practices, senior-rust-practices, skill-creator
 
 ## Documentation
 
 Additional documentation is available in the `docs/` directory:
 
+- **CODING_STANDARDS.md**: Style, error handling, concurrency, tracing, and testing conventions
 - **docs/templates/AGENTS.md**: Agent configuration templates
 - **docs/templates/CLAUDE.md**: Claude AI integration templates
 - **docs/unused-skills/**: Skills that are available but not currently active
@@ -52,9 +53,9 @@ Additional documentation is available in the `docs/` directory:
 
 ### opencode Configuration (`.opencode/opencode.json`)
 Main configuration file for the opencode AI assistant, defining:
-- Model selection and API settings
+- Plugin configuration (e.g. `@slkiser/opencode-quota` for usage tracking)
+- MCP server connections (e.g. `context7` for library documentation)
 - Agent and skill activation
-- Context limits and behavior preferences
 
 ### Rust Tooling
 
@@ -91,9 +92,10 @@ The template includes pre-configured Rust development tools:
 │   └── opencode.json                                 # Main opencode configuration
 ├── AGENTS.md                                         # Agent configuration documentation
 ├── clippy.toml                                       # Rust linter configuration
+├── CODING_STANDARDS.md                               # Coding standards and conventions
 ├── docs/                                             # Documentation
 │   ├── resources/                                    # Coding references
-│   │   └── rust-performance-optimization.md          # Rust performance optimization guide
+│   │   ├── rust-performance-optimization.md          # Rust performance optimization guide
 │   │   └── writing-a-good-claude.md                  # Guide on how to write AGENTS.md file
 │   ├── templates/                                    # Template documentation
 │   │   ├── AGENTS.md                                 # Agent configuration templates
@@ -104,6 +106,7 @@ The template includes pre-configured Rust development tools:
 │       ├── gtk-ui-ux-engineer/
 │       ├── karpathy-guidelines/
 │       ├── performance-optimization/
+│       ├── rust-best-practices/
 │       ├── senior-rust-practices/
 │       └── skill-creator/
 ├── LICENSE                                           # Project license
