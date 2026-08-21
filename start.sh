@@ -8,7 +8,7 @@ printf "y\nsh\n" | specify init --here --integration opencode
 # Copy template files from vibe-code-template and merge .opencode
 TEMP_DIR=$(mktemp -d)
 git clone https://github.com/loxoron218/vibe-code-template.git "$TEMP_DIR"
-cp "$TEMP_DIR"/AGENTS.md "$TEMP_DIR"/clippy.toml "$TEMP_DIR"/LICENSE "$TEMP_DIR"/rustfmt.toml "$TEMP_DIR"/lints.toml .
+cp "$TEMP_DIR"/AGENTS.md "$TEMP_DIR"/clippy.toml "$TEMP_DIR"/CODING_STANDARDS.md "$TEMP_DIR"/LICENSE "$TEMP_DIR"/rustfmt.toml "$TEMP_DIR"/lints.toml .
 cp -r "$TEMP_DIR"/.opencode/. ./.opencode/
 rm -rf "$TEMP_DIR"
 
