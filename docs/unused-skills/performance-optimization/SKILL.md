@@ -1,6 +1,11 @@
 ---
 name: performance-optimization
-description: "Apply systematic performance optimization techniques for Python and Rust code: estimation + profiling, API/bulk design, algorithmic wins, cache-friendly memory layout, fewer allocations, fast paths, caching, and compiler-friendly hot loops. Use for performance code reviews, refactors, and profiling-driven optimizations. Keywords: performance, latency, throughput, cache, allocation, memory layout, PyO3, msgspec, tokio, async, pprof, py-spy, perf."
+description:
+  "Apply systematic performance optimization techniques for Python and Rust code: estimation +
+  profiling, API/bulk design, algorithmic wins, cache-friendly memory layout, fewer allocations,
+  fast paths, caching, and compiler-friendly hot loops. Use for performance code reviews, refactors,
+  and profiling-driven optimizations. Keywords: performance, latency, throughput, cache, allocation,
+  memory layout, PyO3, msgspec, tokio, async, pprof, py-spy, perf."
 license: Apache-2.0
 compatibility: Skills-compatible coding agents working on Python and Rust codebases.
 metadata:
@@ -12,7 +17,8 @@ metadata:
 
 # Python & Rust Performance Hints (Jeff Dean & Sanjay Ghemawat style)
 
-This skill packages key ideas from Abseil's **Performance Hints** document, adapted for Python and Rust development.
+This skill packages key ideas from Abseil's **Performance Hints** document, adapted for Python and
+Rust development.
 
 Use it to:
 
@@ -25,8 +31,10 @@ Use it to:
 
 - **Scope:** single-process / single-binary performance (CPU, memory, allocations, cache behavior).
 - **Do not:** change externally observable behavior unless the user explicitly agrees.
-- **Do not:** introduce undefined behavior, data races, or brittle "clever" micro-opts without evidence.
-- **Default philosophy:** choose the faster alternative **when it doesn't materially harm readability or complexity**; otherwise, measure first.
+- **Do not:** introduce undefined behavior, data races, or brittle "clever" micro-opts without
+  evidence.
+- **Default philosophy:** choose the faster alternative **when it doesn't materially harm
+  readability or complexity**; otherwise, measure first.
 
 ## When to apply
 
@@ -41,7 +49,8 @@ Use this skill when the task involves any of:
 
 ## What to ask for (minimum inputs)
 
-If you don't have enough information, ask for the smallest set that changes your recommendation quality:
+If you don't have enough information, ask for the smallest set that changes your recommendation
+quality:
 
 1. **Goal:** latency vs throughput vs memory (and the SLO if any)
 2. **Where:** hot path vs init vs test-only (and typical input sizes)
@@ -58,7 +67,8 @@ If none exists yet, proceed with _static analysis + "what to measure first"_.
 
 - **Test code:** mostly care about asymptotic complexity and test runtime.
 - **Application code:** separate **init/cold** vs **hot path**.
-- **Library code:** prefer "safe, low-complexity" performance techniques because you can't predict callers.
+- **Library code:** prefer "safe, low-complexity" performance techniques because you can't predict
+  callers.
 
 ## Step 2 — do a back-of-the-envelope estimate
 
@@ -92,27 +102,27 @@ Before implementing changes, estimate what might dominate:
 
 ### Python-specific costs
 
-| Operation                      |       Approx time |
-| ------------------------------ | ----------------: |
-| dict lookup                    |           20-50 ns |
-| list.append                    |           20-40 ns |
-| getattr on object              |           50-100 ns |
-| isinstance check               |           30-60 ns |
-| JSON parse (stdlib) 1KB        |           50-100 us |
-| msgspec parse 1KB              |             5-15 us |
-| Django ORM query (simple)      |           1-10 ms |
-| Django ORM async query         |         0.5-5 ms |
+| Operation                 | Approx time |
+| ------------------------- | ----------: |
+| dict lookup               |    20-50 ns |
+| list.append               |    20-40 ns |
+| getattr on object         |   50-100 ns |
+| isinstance check          |    30-60 ns |
+| JSON parse (stdlib) 1KB   |   50-100 us |
+| msgspec parse 1KB         |     5-15 us |
+| Django ORM query (simple) |     1-10 ms |
+| Django ORM async query    |    0.5-5 ms |
 
 ### Rust-specific costs
 
-| Operation                      |       Approx time |
-| ------------------------------ | ----------------: |
-| HashMap lookup                 |           10-30 ns |
-| Vec push (no realloc)          |            2-10 ns |
-| String allocation (small)      |           20-50 ns |
-| Arc clone                      |           10-20 ns |
-| tokio task spawn               |          200-500 ns |
-| async channel send             |           50-200 ns |
+| Operation                 | Approx time |
+| ------------------------- | ----------: |
+| HashMap lookup            |    10-30 ns |
+| Vec push (no realloc)     |     2-10 ns |
+| String allocation (small) |    20-50 ns |
+| Arc clone                 |    10-20 ns |
+| tokio task spawn          |  200-500 ns |
+| async channel send        |   50-200 ns |
 
 ### Estimation examples (templates)
 
@@ -147,7 +157,8 @@ When you can, measure to validate impact:
   - `criterion` for microbenchmarks
   - `dhat` for allocation profiling
 
-- Watch for **GIL contention** in Python: contention can lower CPU usage and hide the "real" bottleneck.
+- Watch for **GIL contention** in Python: contention can lower CPU usage and hide the "real"
+  bottleneck.
 - Watch for **async runtime overhead** in Rust: too many small tasks can hurt more than help.
 
 ## Step 4 — pick the biggest lever first
@@ -211,11 +222,13 @@ let results = cache.get_many(&ids)?;
 ### Prefer view types for function arguments
 
 **Python:**
+
 - Use `Sequence[T]` or `Iterable[T]` instead of `list[T]` when you don't mutate
 - Accept `bytes` or `memoryview` instead of copying to `bytearray`
 - Use `msgspec.Struct` for zero-copy deserialization
 
 **Rust:**
+
 - Use `&[T]` or `impl AsRef<[T]>` instead of `Vec<T>` when you don't need ownership
 - Use `&str` instead of `String` for read-only string access
 - Use `Cow<'_, T>` when you might need to own or borrow
@@ -223,11 +236,13 @@ let results = cache.get_many(&ids)?;
 ### Thread-compatible vs thread-safe types
 
 **Python:**
+
 - Default to thread-compatible (external GIL or explicit locks)
 - Use `threading.local()` for per-thread state
 - Prefer `asyncio` over threads for I/O-bound work
 
 **Rust:**
+
 - Default to `Send + Sync` for shared state
 - Use `Arc<RwLock<T>>` only when needed; prefer message passing
 - Consider `dashmap` or sharded maps for high-contention scenarios
@@ -421,7 +436,7 @@ for data in stream:
     yield result  # Caveat: only if consumer processes immediately
 ```
 
-### Python: Use __slots__ to reduce memory
+### Python: Use **slots** to reduce memory
 
 ```python
 # Without __slots__: ~152 bytes per instance
