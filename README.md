@@ -1,6 +1,7 @@
 # Coding Template
 
-A modern project template for building applications with opencode AI assistance and spec-kit specification tools.
+A modern project template for building applications with opencode AI assistance and spec-kit
+specification tools.
 
 ## Quick Start
 
@@ -11,6 +12,7 @@ curl -L https://raw.githubusercontent.com/loxoron218/coding-template/refs/heads/
 ```
 
 This script will:
+
 - Clone the template repository
 - Move opencode configuration to your home directory
 - Initialize a Rust project
@@ -28,7 +30,9 @@ This script will:
 - **Active Development Skills** (`.opencode/skills/`):
   - `m10-performance`: Systematic performance optimization techniques
   - `sql-optimization-patterns`: Database query optimization strategies
-- **Inactive Skills** (`docs/unused-skills/`): code-review-excellence, frontend-design, gtk-ui-ux-engineer, karpathy-guidelines, performance-optimization, rust-best-practices, senior-rust-practices, skill-creator
+- **Inactive Skills** (`docs/unused-skills/`): code-review-excellence, frontend-design,
+  gtk-ui-ux-engineer, karpathy-guidelines, performance-optimization, rust-best-practices,
+  senior-rust-practices, skill-creator
 
 ## Documentation
 
@@ -41,18 +45,41 @@ Additional documentation is available in the `docs/` directory:
 
 ## Spec-Kit Slash Commands
 
-| Command | Description |
+| Command | Example |
 | --- | --- |
-| `/speckit.constitution` | Create or update project governing principles and development guidelines. |
-| `/speckit.specify` | Define requirements, user stories, and the scope of what you want to build. |
-| `/speckit.plan` | Generate technical implementation plans based on your chosen tech stack. |
-| `/speckit.tasks` | Break down the plan into a granular, actionable task list. |
-| `/speckit.implement` | Automatically execute tasks to build features according to the approved plan. |
+| `/speckit.constitution` | Create principles focused on code quality, testing standards, user experience consistency, and performance requirements |
+| `/speckit.specify` | Build an application that can help me organize my photos in separate photo albums. Albums are grouped by date and can be re-organized by dragging and dropping on the main page. Albums are never in other nested albums. Within each album, photos are previewed in a tile-like interface |
+| `/speckit.clarify` | Focus on the task card behavior: status changes, comment limits, and who can be assigned |
+| `/speckit.plan` | The application uses Vite with minimal number of libraries. Use vanilla HTML, CSS, and JavaScript as much as possible. Images are not uploaded anywhere and metadata is stored in a local SQLite database |
+| `/speckit.checklist` | Focus on the Kanban board interactions and comment permissions |
+| `/speckit.tasks` | — |
+| `/speckit.taskstoissues` | — |
+| `/speckit.analyze` | — |
+| `/speckit.implement` | Implement only the Setup and Foundational phases: project scaffolding and the project/task data model with basic CRUD. Stop before the user-story features |
+| `/speckit.converge` | — |
+
+### Spec-Kit Extensions
+
+| Command               | Example                                                                              |
+| --------------------- | ------------------------------------------------------------------------------------ |
+| `/speckit.bug.assess` | "TypeError: cannot read properties of undefined (reading 'token') at /auth/callback" |
+| `/speckit.bug.fix`    | —                                                                                    |
+| `/speckit.bug.test`   | —                                                                                    |
+
+| Command                    | Example                                                |
+| -------------------------- | ------------------------------------------------------ |
+| `/speckit.assess.intake`   | "Let users work offline and sync when they reconnect." |
+| `/speckit.assess.research` | —                                                      |
+| `/speckit.assess.define`   | —                                                      |
+| `/speckit.assess.shape`    | —                                                      |
+| `/speckit.assess.decide`   | —                                                      |
 
 ## Configuration Files
 
 ### opencode Configuration (`.opencode/opencode.json`)
+
 Main configuration file for the opencode AI assistant, defining:
+
 - Plugin configuration (e.g. `@slkiser/opencode-quota` for usage tracking)
 - MCP server connections (e.g. `context7` for library documentation)
 - Agent and skill activation
@@ -113,7 +140,8 @@ The template includes pre-configured Rust development tools:
 ├── lints.toml                                        # Rust lints configuration
 ├── README.md                                         # This file
 ├── rustfmt.toml                                      # Rust formatter configuration
-└── start.sh                                          # Setup script
+├── start.sh                                          # Setup script
+└── collate/                                          # Strict-Rust hygiene checker (no python)
 ```
 
 ## License
