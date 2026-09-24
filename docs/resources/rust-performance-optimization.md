@@ -5,7 +5,8 @@
 - **Scope:** single-process / single-binary performance (CPU, memory, allocations, cache behavior)
 - **Do not:** change externally observable behavior unless explicitly agreed
 - **Do not:** introduce undefined behavior, data races, or brittle micro-opts without evidence
-- **Default philosophy:** choose the faster alternative **when it doesn't materially harm readability or complexity**; otherwise, measure first
+- **Default philosophy:** choose the faster alternative **when it doesn't materially harm
+  readability or complexity**; otherwise, measure first
 
 ## When to Apply
 
@@ -18,22 +19,22 @@
 
 ## Reference Latency Table
 
-| Operation                         | Approx time     |
-| --------------------------------- | --------------: |
-| L1 cache reference                |          0.5 ns |
-| L2 cache reference                |            3 ns |
-| Branch mispredict                 |            5 ns |
-| Mutex lock/unlock (uncontended)   |           15 ns |
-| Main memory reference             |           50 ns |
-| Rust function call (non-inlined)  |         1-10 ns |
-| HashMap lookup                    |        10-30 ns |
-| Vec push (no realloc)             |         2-10 ns |
-| String allocation (small)         |        20-50 ns |
-| Arc clone                         |        10-20 ns |
-| tokio task spawn                  |     200-500 ns |
-| async channel send                |      50-200 ns |
-| Read 4KB from SSD                 |      20,000 ns |
-| Read 1MB sequentially from SSD    |   1,000,000 ns |
+| Operation                        |  Approx time |
+| -------------------------------- | -----------: |
+| L1 cache reference               |       0.5 ns |
+| L2 cache reference               |         3 ns |
+| Branch mispredict                |         5 ns |
+| Mutex lock/unlock (uncontended)  |        15 ns |
+| Main memory reference            |        50 ns |
+| Rust function call (non-inlined) |      1-10 ns |
+| HashMap lookup                   |     10-30 ns |
+| Vec push (no realloc)            |      2-10 ns |
+| String allocation (small)        |     20-50 ns |
+| Arc clone                        |     10-20 ns |
+| tokio task spawn                 |   200-500 ns |
+| async channel send               |    50-200 ns |
+| Read 4KB from SSD                |    20,000 ns |
+| Read 1MB sequentially from SSD   | 1,000,000 ns |
 
 ## Profiling Tools
 
@@ -89,6 +90,7 @@ let results = cache.get_many(&ids)?;
 ### Reduce Complexity Class
 
 Common transformations:
+
 - O(N²) → O(N log N) or O(N)
 - O(N log N) sorted-list intersection → O(N) using a hash set
 - O(log N) tree lookup → O(1) using hash lookup
@@ -351,6 +353,7 @@ If no single hotspot dominates:
 ## Example: Unnecessary Clones
 
 **Problem:**
+
 ```rust
 fn build_response(data: &ResponseData) -> String {
     let name = data.name.clone();
@@ -360,6 +363,7 @@ fn build_response(data: &ResponseData) -> String {
 ```
 
 **Fix:**
+
 ```rust
 fn build_response(data: &ResponseData) -> String {
     format!("User {} ({})", &data.name, &data.id)
