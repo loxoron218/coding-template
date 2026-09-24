@@ -1,11 +1,12 @@
 # CODING STANDARDS
 
-This document describes the coding style used in this project. It consolidates the rules from [`AGENTS.md`](./AGENTS.md) with the conventions observed
-across the actual codebase. Formatting and linting rules are enforced by the following files:
+This document describes the coding style used in this project. Formatting and linting rules are
+enforced by the following files:
 
 - [`rustfmt.toml`](./rustfmt.toml)
 - [`clippy.toml`](./clippy.toml)
-- the `[lints.clippy]` table in [`Cargo.toml`](./Cargo.toml) — notably `pedantic` and `nursery` groups are denied.
+- the `[lints.cargo]`, `[lints.clippy]` and`[lints.rust]` tables in [`Cargo.toml`](./Cargo.toml) —
+  notably `pedantic` and `nursery` groups are denied.
 
 The core priorities are:
 
@@ -13,8 +14,9 @@ The core priorities are:
 - following the GNOME's Human Interface Guidelines (HIG)
 - following modern best practices
 
-These priorities take precedence over preserving existing code. **Do not be afraid of refactoring or API restructuring** when it serves them; write
-clean, future-proof code rather than keeping an awkward interface unchanged.
+These priorities take precedence over preserving existing code. **Do not be afraid of refactoring or
+API restructuring** when it serves them; write clean, future-proof code rather than keeping an
+awkward interface unchanged.
 
 ---
 
@@ -22,7 +24,8 @@ clean, future-proof code rather than keeping an awkward interface unchanged.
 
 ### Capability-based grouping
 
-Group modules by capability/domain. **Never** use generic structures like `models/`, `handlers/`, `utils/`, `types/`, or `common/`.
+Group modules by capability/domain. **Never** use generic structures like `models/`, `handlers/`,
+`utils/`, `types/`, or `common/`.
 
 ```text
 src/
@@ -40,17 +43,27 @@ src/
 
 ### Module naming (global stem uniqueness)
 
-Stems must be unique codebase-wide; singular and plural count as the same stem (`album` ≡ `albums`). Consequently, no two modules may share a stem in
-any position (`track_row` + `track_transition`, `album_card` + `album_playback`, or `playback::queue` + `ui::player::queue` are all forbidden).
+Every module file name is a stem, and all stems must be unique codebase-wide across `src/`,
+`tests/`, and `benches/`. The stem is the full `.rs` basename, lowercased, with `-` and `_` treated
+as the same separator and singular and plural folded per word (`album` ≡ `albums`, `track-row` ≡
+`track_row`, `module` ≡ `modules`). Distinct names may share words freely (`track_row` +
+`track_transition`, `queue` + `queue_manager`), but identical stems may not (`playback::queue` +
+`ui::player::queue`, or `collect.rs` in two directories, are forbidden). No file names are exempt
+(`main.rs`, `lib.rs`, `mod.rs`, and `build.rs` count like everything else). Stems are derived
+exclusively from `.rs` file names (parent indexes included); grouping directories without a parent
+index (e.g. `tests/verification/`) contribute no stems. When two modules need the same name, first
+try a precise, non-vague synonym; fall back to a capability-prefixed compound (`alias_collect.rs` vs
+`group_collect.rs`) when only vague synonyms are available.
 
-### Parent-index modules (no `mod.rs`)
+### Parent-index modules
 
-Use the modern Rust module style: a `foo.rs` parent index that declares its submodules, with submodules living in a sibling `foo/` directory. There
-are no `mod.rs` files anywhere in the codebase.
+Use the modern Rust module style: a `foo.rs` parent index that declares its submodules, with
+submodules living in a sibling `foo/` directory.
 
-A parent index declares `pub mod` items and carries a `//!` module doc comment. It is **not** required to be a pure re-export shim: shared
-implementation that doesn't belong to a single submodule — such as a module-level trait or a shared error enum — lives directly in `foo.rs` alongside
-the `pub mod` declarations:
+A parent index declares `pub mod` items and carries a `//!` module doc comment. It is **not**
+required to be a pure re-export shim: shared implementation that doesn't belong to a single
+submodule — such as a module-level trait or a shared error enum — lives directly in `foo.rs`
+alongside the `pub mod` declarations:
 
 ```rust
 //! Persistence layer: domain types, repository trait, and error types.
@@ -63,9 +76,10 @@ pub mod database;
 
 ### Files
 
-- **ONLY** write `.rs` files. Never use `.ui`, `.xml`, or `.blp` files.
-- Keep each `.rs` file at **400 lines or fewer**. When a module outgrows the limit, split it into a subdirectory with a parent index.
-- Keep module nesting shallow. The maximum sub-folder depth in the codebase is **2** (e.g. `src/ui/gallery/`).
+- Keep each `.rs` file at **400 lines or fewer**. When a module outgrows the limit, split it into
+  smaller modules.
+- Keep module nesting shallow. The maximum sub-folder depth in the codebase is **2** (e.g.
+  `src/ui/gallery/`).
 
 ---
 
@@ -74,16 +88,15 @@ pub mod database;
 ### Commands
 
 ```bash
-cargo clippy --fix --allow-dirty --all-targets && cargo fmt
+cargo clippy --fix --allow-dirty --all-targets --all-features && cargo fmt
 cargo test    # all tests must pass before committing
 cargo bench   # benchmarks
 ```
 
 ### Hard rules
 
-- **Never** commit with clippy warnings.
-- **Never** use `#[allow(...)]` attributes.
-- **Never** write `unsafe` code.
+- **Never** commit with clippy warnings; treat every warning as an error.
+- **Never** suppress lints with `#[allow(...)]` or `#[expect(...)]` attributes.
 
 ### Code style
 
@@ -94,14 +107,15 @@ cargo bench   # benchmarks
 
 ## 3. Imports
 
-Imports are grouped into three blocks separated by blank lines, in this order:
+Imports are grouped into four blocks separated by blank lines, in this order:
 
 1. `std::` items
 2. external crates
-3. `crate::` internal items
+3. the own crate by package name (only in `tests/` and `benches/`)
+4. `crate::` internal items
 
-One item per import line (`imports_granularity = "One"`). Multiple external crates are imported in a single `use { ... }` block. Prefer
-`crate::`-relative imports and nested re-imports.
+One item per import line (`imports_granularity = "One"`). Multiple external crates are imported in a
+single `use { ... }` block. Prefer `crate::`-relative imports and nested re-imports.
 
 ```rust
 use std::{fs::File, path::Path};
@@ -126,8 +140,9 @@ use crate::domain_a::DomainError::{
 };
 ```
 
-When a naming collision would occur (e.g. an enum variant), prefer renaming the **import** with an alias rather than fully qualifying the name at
-every call site. Alias the colliding import, not the item usage.
+When a naming collision would occur (e.g. an enum variant), prefer renaming the **import** with an
+alias rather than fully qualifying the name at every call site. Alias the colliding import, not the
+item usage.
 
 ---
 
@@ -135,8 +150,9 @@ every call site. Alias the colliding import, not the item usage.
 
 ### Library crates: typed errors with `thiserror`
 
-Define a `#[derive(Debug, Error)]` enum, document the enum with a summary comment, document **every variant** with `///`, give each a
-`#[error("...")]` message, and use `#[from]` to wrap source errors.
+Define a `#[derive(Debug, Error)]` enum, document the enum with a summary comment, document **every
+variant** with `///`, give each a `#[error("...")]` message, and use `#[from]` to wrap source
+errors.
 
 ```rust
 /// Error type for repository operations.
@@ -153,8 +169,9 @@ pub enum RepoError {
 
 ### Binaries: `anyhow` at top level only
 
-Use `anyhow::{Context, Result}` in the binary and at application boundaries. Attach context with `.context(...)` / `.with_context(...)` so errors are
-actionable. Never leak `anyhow::Error` across library boundaries.
+Use `anyhow::{Context, Result}` in the binary and at application boundaries. Attach context with
+`.context(...)` / `.with_context(...)` so errors are actionable. Never leak `anyhow::Error` across
+library boundaries.
 
 ```rust
 create_dir_all(&log_dir)
@@ -163,7 +180,8 @@ create_dir_all(&log_dir)
 
 ### Tests: `anyhow::Result` + `bail!` / `ensure!`
 
-Functional tests return `anyhow::Result` and assert with `ensure!` / `bail!`. Trivial tests return `()` and use `assert!`.
+Functional tests return `anyhow::Result` and assert with `ensure!` / `bail!`. Trivial tests return
+`()` and use `assert!`.
 
 ```rust
 #[test]
@@ -191,27 +209,26 @@ fn process_item_success() -> Result<()> {
 
 ## 5. Concurrency
 
-Use `parking_lot::Mutex` (or `RwLock`) behind an `Arc`. Keep lock scopes minimal and explicit: wrap short critical sections in `{ ... }` blocks and
+Use the first abstraction that fits — never reach lower for convenience:
+
+1. `&T` / `&mut T` via `thread::scope`: 0 alloc, 0 cycles. Default.
+2. `AtomicT`, `OnceLock` / `LazyLock`: 0 alloc, ~1–10 cycles. Flags, counters, globals.
+3. `parking_lot::RwLock` (read-heavy) / `Mutex`: 0 alloc, ~3–15 cycles. Never `std::sync::*`.
+4. `Cow<'a, T>`: 0 alloc on borrowed path. Read-heavy, rarely mutated.
+5. `Box<T>`: 1 alloc. Only to transfer large `Send` values across threads.
+6. `Arc<T>`: 1 alloc + ~10–30 cycles per clone/drop. Last resort for dynamic lifetimes only.
+
+Keep lock scopes minimal and explicit: wrap short critical sections in `{ ... }` blocks and
 `drop(lock)` when a held lock should be released before further work.
 
-Traits whose methods run on async tasks declare `Send + Sync + 'static` supertraits and return futures that are themselves `Send`:
+Traits whose methods run on async tasks declare `Send + Sync + 'static` supertraits and return
+futures that are themselves `Send`:
 
 ```rust
 /// Interface for all persistent storage operations.
 pub trait Storage: Send + Sync + 'static {
     /// Insert a new track, returning its id.
     fn insert_track(&self, track: NewTrack) -> impl Future<Output = Result<i64>> + Send;
-}
-```
-
-The common pattern is a struct holding `Arc<Mutex<Inner>>`:
-
-```rust
-/// Thread-safe work queue managing ordered item IDs with navigation.
-#[derive(Debug, Clone)]
-pub struct WorkQueue {
-    /// Shared inner state protected by a mutex.
-    inner: Arc<Mutex<WorkQueueInner>>,
 }
 ```
 
@@ -230,12 +247,12 @@ Minimize the time locks are held — do not perform I/O or event dispatch while 
 
 ## 6. Tracing & Observability
 
-Use structured `tracing` everywhere, with fields for structured data. Never log with interpolated strings when fields are appropriate.
+Use structured `tracing` everywhere, with fields for structured data. Never log with interpolated
+strings when fields are appropriate.
 
 ```rust
 info!(item_id, "Advancing to next item",);
 
-// errors carry the source as a field
 warn!(
     error = %e,
     path = %config_path.display(),
@@ -243,7 +260,8 @@ warn!(
 );
 ```
 
-The binary entry point initializes `tracing-subscriber` with an `EnvFilter`, a JSON file appender, and a human-readable stderr layer.
+The binary entry point initializes `tracing-subscriber` with an `EnvFilter`, a JSON file appender,
+and a human-readable stderr layer.
 
 ---
 
@@ -262,6 +280,10 @@ The binary entry point initializes `tracing-subscriber` with an `EnvFilter`, a J
 /// # Arguments
 ///
 /// * `item_path` - Path to the item file
+///
+/// # Returns
+///
+/// * `Result<Self, ParseError>` - Loaded item or parse error
 pub fn open<P: AsRef<Path>>(path: P) -> Result<Self, ParseError> { ... }
 ```
 
@@ -274,6 +296,24 @@ pub fn open<P: AsRef<Path>>(path: P) -> Result<Self, ParseError> { ... }
 - Use the builder pattern with `css_classes`, `tooltip_text`, and `can_focus`.
 - Set accessibility labels via `update_property(Label(...))`.
 - Use `set_use_underline(true)` for keyboard mnemonics.
+
+### Main-thread discipline
+
+Freezes are compound — every synchronous main-thread op accumulates over repetitions. Apply all of
+these:
+
+1. Never open/close/drop I/O resources on main thread; a worker owns drop + open, main only sends
+   commands.
+2. Never heavy sync work on main thread (image decode, JSON parse, file read, subprocess); decode
+   off-thread, reconstruct the UI object on main.
+3. Never `spawn_local` + `recv().await` for UI updates or async I/O; poll state via
+   `timeout_add_local` (100–500 ms) and drain `mpsc` with `try_recv`. Run async I/O on dedicated
+   threads with a shared `Arc<Runtime>`.
+4. Never shared broadcast with mixed-speed subscribers; per-subscriber unbounded channels. On
+   `Lagged` continue, on `Closed` break.
+5. Never stale-thread writes; set new state before spawn, workers check id / `is_abandoned()` before
+   cleanup.
+6. Never `yield_now()` spins; `sleep(1 ms)`, `Condvar`, or blocking `recv`.
 
 ```rust
 /// Build a circular action button for content overlays.
@@ -292,12 +332,14 @@ pub fn build_action_button() -> Button {
 
 ### HIG component choices
 
-- **Navigation:** `ToolbarView` with `HeaderBar` and a bottom bar or side panel instead of manual `GtkBox` layouts.
-- **Preferences:** `PreferencesDialog` with `PreferencesPage`, `PreferencesGroup`, and appropriate rows (`ActionRow`, `SwitchRow`, `ComboRow`,
-  `EntryRow`, `PasswordEntryRow`, `SpinRow`).
+- **Navigation:** `ToolbarView` with `HeaderBar` and a bottom bar or side panel instead of manual
+  `GtkBox` layouts.
+- **Preferences:** `PreferencesDialog` with `PreferencesPage`, `PreferencesGroup`, and appropriate
+  rows (`ActionRow`, `SwitchRow`, `ComboRow`, `EntryRow`, `PasswordEntryRow`, `SpinRow`).
 - **Feedback:** `Toast`, `suggested-action` / `destructive-action`.
-- **Responsiveness:** `AdwBreakpoint` (declarative), `AdwNavigationSplitView` + `AdwNavigationView` (collapsible panes), `AdwOverlaySplitView`
-  (overlay sidebars), `AdwViewSwitcher` + `AdwViewSwitcherBar` (flat tab navigation).
+- **Responsiveness:** `AdwBreakpoint` (declarative), `AdwNavigationSplitView` + `AdwNavigationView`
+  (collapsible panes), `AdwOverlaySplitView` (overlay sidebars), `AdwViewSwitcher` +
+  `AdwViewSwitcherBar` (flat tab navigation).
 - **Spacing:** 6 px scale (6 / 12 / 18 / 24 / 30 px).
 - **Radii:** never hardcoded.
 
@@ -305,11 +347,13 @@ pub fn build_action_button() -> Button {
 
 ## 9. Testing & Benchmarking
 
-- Place functional unit tests at the bottom of each file in a `#[cfg(test)] mod tests { ... }` block.
+- Place functional unit tests at the bottom of each file in a `#[cfg(test)] mod tests { ... }`
+  block.
 - Use `tempfile` for test fixtures.
 - For technical tasks, use deterministic simulation testing.
-- Tests that need the GTK main thread should import `libadwaita::gtk::{self, test}`; this allows using `#[test]` (the macro runs the test on the main
-  thread) instead of a dedicated `#[gtk::test]` attribute.
-- Integration/acceptance tests live in `tests/` and carry a `//!` header that references the relevant spec/FR (e.g.,
-  `No-hardware-at-startup acceptance test (FR-030)`).
+- Tests that need the GTK main thread should import `libadwaita::gtk::{self, test}`; this allows
+  using `#[test]` (the macro runs the test on the main thread) instead of a dedicated `#[gtk::test]`
+  attribute.
+- Integration/acceptance tests live in `tests/` and carry a `//!` header that references the
+  relevant spec/FR (e.g., `No-hardware-at-startup acceptance test (FR-030)`).
 - Benchmarks live in `benches/` using `criterion`.
