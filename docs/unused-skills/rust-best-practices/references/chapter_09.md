@@ -1,8 +1,11 @@
 # Chapter 9 - Understanding Pointers
 
-Many higher level languages hide memory management, typically **passing by value** (copy data) or **passing by reference** (reference to shared data) without worrying about allocation, heap, stack, ownership and lifetimes, it is all delegated to the garbage collector or VM. Here is a comparison on this topic between a few languages:
+Many higher level languages hide memory management, typically **passing by value** (copy data) or
+**passing by reference** (reference to shared data) without worrying about allocation, heap, stack,
+ownership and lifetimes, it is all delegated to the garbage collector or VM. Here is a comparison on
+this topic between a few languages:
 
-### 📌 Language Comparison 
+### 📌 Language Comparison
 
 | Language | Value Types | Reference/Pointer Types | Async Model & Types | Manual Memory |
 |------------ |------------------------------------- |----------------------------------------------------------- |---------------------------------------------------------------------------- |------------------------------ |
@@ -17,6 +20,7 @@ Many higher level languages hide memory management, typically **passing by value
 ## 9.1 Thread Safety
 
 Rust tracks pointers using `Send` and `Sync` traits:
+
 - `Send` means data can move across threads.
 - `Sync` means data can be referenced from multiple threads.
 
@@ -43,7 +47,8 @@ Rust tracks pointers using `Send` and `Sync` traits:
 
 ### `&T` - Shared Borrow:
 
-Probably the most common type in a Rust code base, it is **Safe, with no mutation** and allows **multiple readers**.
+Probably the most common type in a Rust code base, it is **Safe, with no mutation** and allows
+**multiple readers**.
 
 ```rust
 let data: String = String::from_str("this a string").unwrap();
@@ -64,9 +69,11 @@ fn print_bytes(s: &String) {
     println!("{:?}", s.as_bytes())
 }
 ```
+
 ### `&mut T` - Exclusive Borrow:
 
-Probably the most common *mutable* type in a Rust code base, it is **Safe, but only allows one mutable borrow at a time**.
+Probably the most common _mutable_ type in a Rust code base, it is **Safe, but only allows one
+mutable borrow at a time**.
 
 ```rust
 let mut data: String = String::from_str("this a string").unwrap();
@@ -91,15 +98,19 @@ pub enum MySubBoxedEnum<T> {
 
 ### [`Rc<T>`](https://doc.rust-lang.org/std/rc/struct.Rc.html) - Reference Counter (single-thread)
 
-You need multiple references to data in a single thread. Most common example is linked-list implementation.
+You need multiple references to data in a single thread. Most common example is linked-list
+implementation.
 
 ### [`Arc<T>`](https://doc.rust-lang.org/std/sync/struct.Arc.html) - Atomic Reference Counter (multi-thread)
 
-You need multiple references to data in multiple threads. Most common use cases is sharing readonly Vec across thread with `Arc<[T]>` and wrapping a `Mutex` so it can be easily shared across threads, `Arc<Mutex<T>>`.
+You need multiple references to data in multiple threads. Most common use cases is sharing readonly
+Vec across thread with `Arc<[T]>` and wrapping a `Mutex` so it can be easily shared across threads,
+`Arc<Mutex<T>>`.
 
 ### [`RefCell<T>`](https://doc.rust-lang.org/std/cell/struct.RefCell.html) - Runtime checked interior mutability
 
-Used when you need shared access and the ability to mutate date, borrow rules are enforced at runtime. **It may panic!**.
+Used when you need shared access and the ability to mutate date, borrow rules are enforced at
+runtime. **It may panic!**.
 
 ```rust
 use std::cell::RefCell;
@@ -110,6 +121,7 @@ assert_eq!(&*x.borrow(), 42, "Not meaning of life");
 ```
 
 Panic example:
+
 ```rust
 use std::cell::RefCell;
 let x = RefCell::new(42);
@@ -121,7 +133,8 @@ let mutable = x.borrow_mut();
 
 ### [`Cell<T>`](https://doc.rust-lang.org/std/cell/struct.Cell.html) - Copy-only interior mutability
 
-Somewhat the fast and safe version of `RefCell`, but it is limited to types that implement the `Copy` trait:
+Somewhat the fast and safe version of `RefCell`, but it is limited to types that implement the
+`Copy` trait:
 
 ```rust
 use std::cell::Cell;
@@ -149,16 +162,18 @@ assert_eq!(my_struct.special_field.get(), new_value);
 
 ### [`Mutex<T>`](https://doc.rust-lang.org/std/sync/struct.Mutex.html) - Thread-safe mutability
 
-An exclusive access pointer that allows a thread to read/write the data contained inside. It is usually wrapped in an `Arc` to allow shared access to the Mutex.
+An exclusive access pointer that allows a thread to read/write the data contained inside. It is
+usually wrapped in an `Arc` to allow shared access to the Mutex.
 
 ### [`RwLock<T>`](https://doc.rust-lang.org/std/sync/struct.RwLock.html) - Thread-safe mutability
 
-Similar to a `Mutex`, but it allows multiple threads to read it OR a single thread to write. It is usually wrapped in an `Arc` to allow shared access to the RwLock.
-
+Similar to a `Mutex`, but it allows multiple threads to read it OR a single thread to write. It is
+usually wrapped in an `Arc` to allow shared access to the RwLock.
 
 ### [`*const T/*mut T`](https://doc.rust-lang.org/std/primitive.pointer.html) - Raw pointers
 
-Inherently **unsafe** and necessary for FFI. Rust makes their usage explicit to avoid accidental misuse and unwilling manual memory management.
+Inherently **unsafe** and necessary for FFI. Rust makes their usage explicit to avoid accidental
+misuse and unwilling manual memory management.
 
 ```rust
 let x = 5;
@@ -178,7 +193,7 @@ use std::{cell::OnceCell, rc::Rc};
 #[derive(Debug, Default)]
 struct MyStruct {
     distance: usize,
-    root: Option<Rc<OnceCell<MyStruct>>>, 
+    root: Option<Rc<OnceCell<MyStruct>>>,
 }
 
 fn main() {
@@ -252,5 +267,6 @@ let _ = &*CONFIG;
 ```
 
 ## References
+
 - [Mara Bos - Rust Atomics and Locks](https://marabos.nl/atomics/)
 - [Semicolon video on pointers](https://www.youtube.com/watch?v=Ag_6Q44PBNs)

@@ -1,17 +1,24 @@
 ---
 name: senior-rust-practices
-description: This skill should be used when the user asks about "rust workspace", "rust best practices", "cargo workspace setup", "rust code organization", "rust dependency management", "rust testing strategy", "rust project", "scalable rust", "rust CI setup", or needs guidance on senior-level Rust development patterns, workspace design, code organization strategies, or production-ready Rust architectures.
+description:
+  This skill should be used when the user asks about "rust workspace", "rust best practices", "cargo
+  workspace setup", "rust code organization", "rust dependency management", "rust testing strategy",
+  "rust project", "scalable rust", "rust CI setup", or needs guidance on senior-level Rust
+  development patterns, workspace design, code organization strategies, or production-ready Rust
+  architectures.
 ---
 
 # Senior Rust Development Practices
 
-Battle-tested patterns for Rust workspace architecture, code organization, dependencies, and testing that scale from prototype to production.
+Battle-tested patterns for Rust workspace architecture, code organization, dependencies, and testing
+that scale from prototype to production.
 
 ## Git Worktree Workflow Compliance
 
 **All coding work MUST happen in git worktrees.** Before making any code changes:
 
-1. Create a worktree: `git worktree add ~/.claude/worktrees/$(basename $(pwd))/<task> -b feat/<task>`
+1. Create a worktree:
+   `git worktree add ~/.claude/worktrees/$(basename $(pwd))/<task> -b feat/<task>`
 2. Work in that directory
 3. Use `/merge` to consolidate changes back to main
 
@@ -60,7 +67,8 @@ repo/
 - **app / service**: Wiring (DI), config, runtime, orchestration.
 - **bins**: CLI/daemon that just calls "app".
 
-**Critical rule:** If `core` imports `tokio`, `reqwest`, or `sqlx`, you've already lost the separation.
+**Critical rule:** If `core` imports `tokio`, `reqwest`, or `sqlx`, you've already lost the
+separation.
 
 ### Default to a Small Number of Crates
 
@@ -200,7 +208,8 @@ Make dependency issues visible early (licenses, advisories, duplicate versions).
 
 ### Don't Use `unwrap()` in Libraries
 
-In binaries/tests it's fine (especially in test scaffolding). In libraries, return errors with context.
+In binaries/tests it's fine (especially in test scaffolding). In libraries, return errors with
+context.
 
 ## Testing Strategy That Scales
 
@@ -327,7 +336,8 @@ cargo test --workspace --all-features
 ## Compile Times and Ergonomics
 
 - Use `resolver = "2"` and avoid unnecessary default features
-- Split "heavy" crates (like DB codegen, protobuf) into separate crates if they dominate rebuild time
+- Split "heavy" crates (like DB codegen, protobuf) into separate crates if they dominate rebuild
+  time
 - Prefer incremental-friendly patterns: fewer proc-macros, fewer generics in hot paths unless needed
 
 ## Practical Rules of Thumb

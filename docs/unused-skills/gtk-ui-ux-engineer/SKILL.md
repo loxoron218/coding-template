@@ -1,16 +1,23 @@
 ---
 name: gtk-ui-ux-engineer
-description: A GTK (GTK4/GTK3) UI/UX specialist that crafts beautiful, native-feeling desktop applications following GNOME Human Interface Guidelines. Use this skill when working with GTK widget composition, Libadwaita theming, CSS styling, accessible layouts, and modern GTK4 features like GtkListView, property bindings, and event controllers. Handles visual design decisions, layout composition, responsive designs, and theme-aware styling for Linux desktop applications.
+description:
+  A GTK (GTK4/GTK3) UI/UX specialist that crafts beautiful, native-feeling desktop applications
+  following GNOME Human Interface Guidelines. Use this skill when working with GTK widget
+  composition, Libadwaita theming, CSS styling, accessible layouts, and modern GTK4 features like
+  GtkListView, property bindings, and event controllers. Handles visual design decisions, layout
+  composition, responsive designs, and theme-aware styling for Linux desktop applications.
 license: See LICENSE.txt
 ---
 
 # GTK UI/UX Engineer
 
-A GTK (GTK4/GTK3) UI/UX specialist who crafts beautiful, native-feeling desktop applications following GNOME Human Interface Guidelines and modern GTK4 best practices.
+A GTK (GTK4/GTK3) UI/UX specialist who crafts beautiful, native-feeling desktop applications
+following GNOME Human Interface Guidelines and modern GTK4 best practices.
 
 ## Design Philosophy
 
 ### Purpose
+
 - Create visually stunning GTK applications that feel native to the Linux desktop
 - Follow GNOME Human Interface Guidelines (HIG) while pushing aesthetic boundaries
 - Balance platform integration with distinctive visual identity
@@ -18,12 +25,15 @@ A GTK (GTK4/GTK3) UI/UX specialist who crafts beautiful, native-feeling desktop 
 - Ship production-grade code with proper memory management and modern GTK4 patterns
 
 ### Tone
+
 - Native-first: Embrace platform conventions (header bars, Adwaita, libadwaita)
 - Bold aesthetics: Don't settle for "default" GTK styling - make visual statements
-- Accessibility-obsessed: Every UI decision considers screen readers, keyboard navigation, high contrast
+- Accessibility-obsessed: Every UI decision considers screen readers, keyboard navigation, high
+  contrast
 - Performance-conscious: Efficient list views, minimal redraws, proper GObject lifecycle
 
 ### Constraints
+
 - **MUST** follow GNOME HIG principles for platform integration
 - **MUST** use modern GTK4 APIs (GtkApplication, event controllers, GtkListView)
 - **MUST** support light/dark modes with AdwStyleManager
@@ -33,6 +43,7 @@ A GTK (GTK4/GTK3) UI/UX specialist who crafts beautiful, native-feeling desktop 
 - **MUST NOT** mix GTK3 and GTK4 APIs
 
 ### Differentiation
+
 - Unlike generic GTK tutorials that show basic widget usage, this skill emphasizes:
   - **Visual Impact**: Custom CSS, unique accent colors, deliberate animations
   - **Modern Patterns**: GtkListView with factories, GActions, property bindings
@@ -53,6 +64,7 @@ A GTK (GTK4/GTK3) UI/UX specialist who crafts beautiful, native-feeling desktop 
 - ✅ Libadwaita variables: `var(--window-bg-color)`
 
 **GTK3 Syntax That Does NOT Work in GTK4:**
+
 ```css
 /* ❌ GTK3 syntax - breaks in GTK4 */
 @define-color my_color red;
@@ -61,6 +73,7 @@ color: @my_color;
 ```
 
 **GTK4 Correct Syntax:**
+
 ```css
 /* ✅ GTK4 syntax - correct */
 :root {
@@ -83,6 +96,7 @@ color: @my_color;
 ### Typography & Icons
 
 #### Font Stack
+
 ```css
 /* Use system fonts for platform consistency */
 window {
@@ -104,11 +118,13 @@ window {
 ```
 
 #### Icon Usage
+
 - **Use symbolic icons** from GNOME icon theme (e.g., `document-symbolic`, `edit-find-symbolic`)
 - **Scale icons** with icon size CSS properties
 - **Color icons** using CSS `color: var(--accent-bg-color);`
 
 **Example:**
+
 ```c
 // Add symbolic icon to button
 GtkWidget *button = gtk_button_new_from_icon_name("document-open-symbolic");
@@ -118,6 +134,7 @@ gtk_button_set_icon_name(GTK_BUTTON(button), "document-save-symbolic");
 ### Color & Theming
 
 #### Theme-Aware Color System
+
 ```css
 /* Use CSS variables for theme integration */
 :root {
@@ -148,6 +165,7 @@ gtk_button_set_icon_name(GTK_BUTTON(button), "document-save-symbolic");
 ```
 
 #### Visual Hierarchy
+
 ```css
 /* Cards with subtle shadows */
 .card {
@@ -174,17 +192,31 @@ gtk_button_set_icon_name(GTK_BUTTON(button), "document-save-symbolic");
 ### Spacing & Layout
 
 #### Spacing Scale
+
 ```css
 /* 4px base unit */
-.space-xs  { padding: 4px; }
-.space-sm  { padding: 8px; }
-.space-md  { padding: 12px; }
-.space-lg  { padding: 16px; }
-.space-xl  { padding: 24px; }
-.space-2xl { padding: 32px; }
+.space-xs {
+  padding: 4px;
+}
+.space-sm {
+  padding: 8px;
+}
+.space-md {
+  padding: 12px;
+}
+.space-lg {
+  padding: 16px;
+}
+.space-xl {
+  padding: 24px;
+}
+.space-2xl {
+  padding: 32px;
+}
 ```
 
 #### Border Radius
+
 ```css
 /* Match Adwaita conventions */
 button {
@@ -203,12 +235,14 @@ window {
 ### Motion & Animation
 
 #### Delicate Transitions
+
 ```css
 /* Smooth property transitions */
 button {
-  transition: background-color 200ms ease,
-              transform 100ms ease,
-              box-shadow 200ms ease;
+  transition:
+    background-color 200ms ease,
+    transform 100ms ease,
+    box-shadow 200ms ease;
 }
 
 button:hover {
@@ -222,6 +256,7 @@ button:active {
 ```
 
 #### Purposeful Motion
+
 ```css
 /* Fade in for new content */
 fade-in {
@@ -229,8 +264,14 @@ fade-in {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Avoid excessive animations - use sparingly for emphasis */
@@ -239,6 +280,7 @@ fade-in {
 ### Responsive Design
 
 #### Adaptive Containers
+
 ```c
 /* Use AdwLeaflet for mobile-first layouts */
 GtkWidget *leaflet = adw_leaflet_new();
@@ -250,6 +292,7 @@ g_signal_connect(leaflet, "notify::folded",
 ```
 
 #### Breakpoint-Based Styling
+
 ```css
 /* Compact layouts for narrow windows */
 window {
@@ -269,6 +312,7 @@ window {
 ### Accessibility
 
 #### Keyboard Navigation
+
 ```c
 // Ensure all interactive elements are keyboard focusable
 gtk_widget_set_can_focus(widget, TRUE);
@@ -281,6 +325,7 @@ gtk_label_set_mnemonic_widget(label, entry);
 ```
 
 #### Accessible Labels
+
 ```c
 // Label widgets properly
 gtk_accessible_update_property(GTK_ACCESSIBLE(widget),
@@ -297,6 +342,7 @@ gtk_accessible_update_property(GTK_ACCESSIBLE(widget),
 ```
 
 #### High Contrast Support
+
 ```css
 @media (prefers-contrast: more) {
   * {
@@ -317,6 +363,7 @@ gtk_accessible_update_property(GTK_ACCESSIBLE(widget),
 ### Application Structure
 
 #### Modern GTK4 Application Pattern
+
 ```c
 // Subclass GtkApplication
 struct _MyApp {
@@ -336,6 +383,7 @@ static void my_app_activate(GApplication *app) {
 ```
 
 #### Window Template Pattern
+
 ```c
 // Class init - load UI from resource
 static void my_window_class_init(MyWindowClass *klass) {
@@ -357,6 +405,7 @@ static void my_window_init(MyWindow *self) {
 ### Widget Composition
 
 #### Composite Widgets
+
 ```c
 // Create reusable composite widgets
 struct _MyCompositeWidget {
@@ -383,6 +432,7 @@ static void my_composite_widget_init(MyCompositeWidget *self) {
 ```
 
 #### List Views with Factories
+
 ```c
 // Modern GtkListView pattern
 static void setup_listitem_cb(GtkListItem *list_item, gpointer user_data) {
@@ -409,6 +459,7 @@ GtkWidget *listview = gtk_list_view_new(model, factory);
 ### Actions & Menus
 
 #### GAction Architecture
+
 ```c
 // Define action entries
 static GActionEntry app_entries[] = {
@@ -433,6 +484,7 @@ static void on_startup(GApplication *app) {
 ```
 
 #### Menu Integration
+
 ```xml
 <!-- Define menu in .ui file -->
 <menu id="app_menu">
@@ -455,6 +507,7 @@ static void on_startup(GApplication *app) {
 ### State Management
 
 #### GSettings for Persistent State
+
 ```c
 // Create settings
 GSettings *settings = g_settings_new("org.example.app");
@@ -470,6 +523,7 @@ g_signal_connect(settings, "changed::theme",
 ```
 
 #### Property Bindings
+
 ```c
 // Bidirectional binding between widgets
 g_object_bind_property(
@@ -492,6 +546,7 @@ g_object_bind_property_full(
 ### Event Controllers (GTK4 Modern)
 
 #### Keyboard Controller
+
 ```c
 // Use event controllers instead of signals
 GtkEventController *key_controller = gtk_event_controller_key_new();
@@ -501,6 +556,7 @@ g_signal_connect(key_controller, "key-pressed",
 ```
 
 #### Gesture Controllers
+
 ```c
 // Click gesture
 GtkGesture *click = gtk_gesture_click_new();
@@ -522,6 +578,7 @@ gtk_widget_add_controller(drawing_area, GTK_EVENT_CONTROLLER(drag));
 ### Memory Management
 
 #### **WRONG**: Manual reference management
+
 ```c
 GtkWidget *child = gtk_button_new_with_label("Click");
 gtk_box_append(GTK_BOX(box), child);
@@ -529,6 +586,7 @@ g_object_unref(child);  // DANGER: May leak or crash
 ```
 
 #### **CORRECT**: Let containers manage ownership
+
 ```c
 GtkWidget *child = gtk_button_new_with_label("Click");
 gtk_box_append(GTK_BOX(box), child);
@@ -536,6 +594,7 @@ gtk_box_append(GTK_BOX(box), child);
 ```
 
 #### **WRONG**: Not disconnecting signals
+
 ```c
 static void my_widget_init(MyWidget *self) {
     g_signal_connect(self->button, "clicked",
@@ -545,6 +604,7 @@ static void my_widget_init(MyWidget *self) {
 ```
 
 #### **CORRECT**: Clean up in dispose
+
 ```c
 static void my_widget_dispose(GObject *object) {
     MyWidget *self = MY_WIDGET(object);
@@ -556,12 +616,14 @@ static void my_widget_dispose(GObject *object) {
 ### Event Handling
 
 #### **WRONG**: Using GTK3 signals
+
 ```c
 g_signal_connect(widget, "key-press-event",
                  G_CALLBACK(old_handler), NULL);  // GTK3 pattern
 ```
 
 #### **CORRECT**: Use GTK4 event controllers
+
 ```c
 GtkEventController *controller = gtk_event_controller_key_new();
 gtk_widget_add_controller(widget, controller);
@@ -572,12 +634,14 @@ g_signal_connect(controller, "key-pressed",
 ### API Mixing
 
 #### **WRONG**: Mixing GTK3 and GTK4 APIs
+
 ```c
 GtkWidget *window = gtk_window_new();  // GTK3
 GtkApplicationWindow *app_win = gtk_application_window_new(app);  // GTK4
 ```
 
 #### **CORRECT**: Use consistent GTK4 APIs
+
 ```c
 GtkWidget *app_win = gtk_application_window_new(app);
 ```
@@ -585,6 +649,7 @@ GtkWidget *app_win = gtk_application_window_new(app);
 ### Performance
 
 #### **WRONG**: Excessive redraws
+
 ```c
 void on_data_changed(void) {
     gtk_widget_queue_draw(widget);  // Triggers full redraw
@@ -592,6 +657,7 @@ void on_data_changed(void) {
 ```
 
 #### **CORRECT**: Use property notifications
+
 ```c
 void on_data_changed(void) {
     gtk_widget_notify(widget, "content");  // More efficient
@@ -599,6 +665,7 @@ void on_data_changed(void) {
 ```
 
 #### **WRONG**: Rebuilding list models
+
 ```c
 void update_list(void) {
     gtk_list_view_set_model(listview, create_new_model());  // Slow
@@ -606,6 +673,7 @@ void update_list(void) {
 ```
 
 #### **CORRECT**: Modify existing model
+
 ```c
 void update_list(void) {
     GListStore *store = get_current_store();
@@ -619,17 +687,20 @@ void update_list(void) {
 ## Reference Resources
 
 ### Official Documentation
+
 - **GTK4 Getting Started**: https://docs.gtk.org/gtk4/getting_started.html
 - **GNOME Human Interface Guidelines**: https://developer.gnome.org/hig/
 - **Libadwaita Documentation**: https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1.4/
 - **GTK4 Input Handling**: https://docs.gtk.org/gtk4/input-handling.html
 
 ### Real-World Examples
+
 - **GNOME Text Editor**: https://github.com/GNOME/gnome-text-editor
 - **GNOME Nautilus**: https://github.com/GNOME/nautilus
 - **GTK4 Tutorial Examples**: https://github.com/ToshioCP/Gtk4-tutorial
 
 ### Pattern References
+
 - See `references/` directory for:
   - `gnome-hig.md` - HIG principles and patterns
   - `gtk4-best-practices.md` - Modern GTK4 code patterns
@@ -726,6 +797,7 @@ window {
 ```
 
 This example demonstrates:
+
 - AdwApplicationWindow for native GNOME integration
 - Header bar with view switcher
 - Custom CSS loading with GTK4 syntax
