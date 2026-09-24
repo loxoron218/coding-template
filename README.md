@@ -17,6 +17,7 @@ This script will:
 - Move opencode configuration to your home directory
 - Initialize a Rust project
 - Install and configure spec-kit CLI
+- Install the `cargo collate` hygiene checker
 
 ## Features
 
@@ -99,6 +100,11 @@ The template includes pre-configured Rust development tools:
   - Enables unstable features
 
 - **lints.toml**: Configures project-wide lints for additional code quality rules
+
+- **collate** (`collate/`, install once via `cargo install --path collate`, then run via
+  `cargo collate`): Project-specific hygiene checks for strict Rust (see `collate/README.md` for the
+  full lint list). Pure Rust plus the `rg`/`jscpd` CLIs: `cargo install ripgrep jscpd`. Exits `1` on
+  findings, `2` on usage/environment errors.
 
 ## Project Structure
 

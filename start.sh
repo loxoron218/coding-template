@@ -21,6 +21,9 @@ TEMP_DIR=$(mktemp -d)
 git clone https://github.com/loxoron218/coding-template.git "$TEMP_DIR"
 cp "$TEMP_DIR"/AGENTS.md "$TEMP_DIR"/clippy.toml "$TEMP_DIR"/CODING_STANDARDS.md "$TEMP_DIR"/LICENSE "$TEMP_DIR"/rustfmt.toml "$TEMP_DIR"/lints.toml .
 cp -r "$TEMP_DIR"/.opencode/. ./.opencode/
+
+# Reinstall latest template `cargo collate` to ~/.cargo/bin (strict-Rust, no python/alias/per-project copy).
+[ -d "$TEMP_DIR/collate" ] && cargo install --force --path "$TEMP_DIR/collate"
 rm -rf "$TEMP_DIR"
 
 # Add lints from lints.toml to Cargo.toml

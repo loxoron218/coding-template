@@ -11,7 +11,6 @@ enforced by the following files:
 The core priorities are:
 
 - high-performance, maintainable, idiomatic Rust code
-- following the GNOME's Human Interface Guidelines (HIG)
 - following modern best practices
 
 These priorities take precedence over preserving existing code. **Do not be afraid of refactoring or
@@ -290,71 +289,12 @@ pub fn open<P: AsRef<Path>>(path: P) -> Result<Self, ParseError> { ... }
 
 ---
 
-## 8. UI (GTK / Libadwaita, GNOME HIG)
-
-- **Never block the GTK main thread.**
-- Build widgets **programmatically** — never with `.ui`/`.blp`/`.xml`.
-- Use the builder pattern with `css_classes`, `tooltip_text`, and `can_focus`.
-- Set accessibility labels via `update_property(Label(...))`.
-- Use `set_use_underline(true)` for keyboard mnemonics.
-
-### Main-thread discipline
-
-Freezes are compound — every synchronous main-thread op accumulates over repetitions. Apply all of
-these:
-
-1. Never open/close/drop I/O resources on main thread; a worker owns drop + open, main only sends
-   commands.
-2. Never heavy sync work on main thread (image decode, JSON parse, file read, subprocess); decode
-   off-thread, reconstruct the UI object on main.
-3. Never `spawn_local` + `recv().await` for UI updates or async I/O; poll state via
-   `timeout_add_local` (100–500 ms) and drain `mpsc` with `try_recv`. Run async I/O on dedicated
-   threads with a shared `Arc<Runtime>`.
-4. Never shared broadcast with mixed-speed subscribers; per-subscriber unbounded channels. On
-   `Lagged` continue, on `Closed` break.
-5. Never stale-thread writes; set new state before spawn, workers check id / `is_abandoned()` before
-   cleanup.
-6. Never `yield_now()` spins; `sleep(1 ms)`, `Condvar`, or blocking `recv`.
-
-```rust
-/// Build a circular action button for content overlays.
-pub fn build_action_button() -> Button {
-    let btn = Button::builder()
-        .icon_name("object-select-symbolic")
-        .css_classes(["circular", "osd"])
-        .tooltip_text("Select item")
-        .can_focus(true)
-        .use_underline(true)
-        .build();
-    btn.update_property(&[Label("Select item")]);
-    btn
-}
-```
-
-### HIG component choices
-
-- **Navigation:** `ToolbarView` with `HeaderBar` and a bottom bar or side panel instead of manual
-  `GtkBox` layouts.
-- **Preferences:** `PreferencesDialog` with `PreferencesPage`, `PreferencesGroup`, and appropriate
-  rows (`ActionRow`, `SwitchRow`, `ComboRow`, `EntryRow`, `PasswordEntryRow`, `SpinRow`).
-- **Feedback:** `Toast`, `suggested-action` / `destructive-action`.
-- **Responsiveness:** `AdwBreakpoint` (declarative), `AdwNavigationSplitView` + `AdwNavigationView`
-  (collapsible panes), `AdwOverlaySplitView` (overlay sidebars), `AdwViewSwitcher` +
-  `AdwViewSwitcherBar` (flat tab navigation).
-- **Spacing:** 6 px scale (6 / 12 / 18 / 24 / 30 px).
-- **Radii:** never hardcoded.
-
----
-
-## 9. Testing & Benchmarking
+## 8. Testing & Benchmarking
 
 - Place functional unit tests at the bottom of each file in a `#[cfg(test)] mod tests { ... }`
   block.
 - Use `tempfile` for test fixtures.
 - For technical tasks, use deterministic simulation testing.
-- Tests that need the GTK main thread should import `libadwaita::gtk::{self, test}`; this allows
-  using `#[test]` (the macro runs the test on the main thread) instead of a dedicated `#[gtk::test]`
-  attribute.
 - Integration/acceptance tests live in `tests/` and carry a `//!` header that references the
   relevant spec/FR (e.g., `No-hardware-at-startup acceptance test (FR-030)`).
 - Benchmarks live in `benches/` using `criterion`.
