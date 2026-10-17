@@ -37,8 +37,15 @@ cp "$TEMP_DIR"/clippy.toml "$TEMP_DIR"/CODING_STANDARDS.md "$TEMP_DIR"/LICENSE "
 cp -r "$TEMP_DIR"/.opencode/. ./.opencode/
 rm -rf "$TEMP_DIR"
 
-# Add lints from lints.toml to Cargo.toml (skip when already present)
-grep -q '^\[lints' Cargo.toml 2>/dev/null || cat lints.toml >> Cargo.toml
+# Sync lints from lints.toml to Cargo.toml (idempotent, template is authoritative)
+awk '
+  /^\[lints[\.\]]/ { skip=1; next }
+  /^\[/ { skip=0 }
+  !skip
+' Cargo.toml > Cargo.toml.tmp && mv Cargo.toml.tmp Cargo.toml
+sed -i -e :a -e '/^\n*$/{$d;N;ba' -e '}' Cargo.toml
+[ -n "$(tail -c1 Cargo.toml)" ] && printf '\n' >> Cargo.toml
+cat lints.toml >> Cargo.toml
 rm -f lints.toml
 
 # Merge opencode files to home
