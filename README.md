@@ -1,7 +1,7 @@
 # Coding Template
 
-A modern project template for building applications with opencode AI assistance and spec-kit
-specification tools.
+A modern project template for building applications with opencode AI assistance and
+mattpocock/skills engineering workflows.
 
 ## Quick Start
 
@@ -16,12 +16,15 @@ This script will:
 - Clone the template repository
 - Move opencode configuration to your home directory
 - Initialize a Rust project
-- Install and configure spec-kit CLI
+- Install mattpocock/skills for opencode
 
 ## Features
 
 - **opencode Integration**: Pre-configured AI coding assistant with multiple model support
-- **spec-kit**: Project specification and planning tools
+- **REA reverse engineering** (`rea-agents@latest` local MCP `rea` + `reverse-engineer-anything` skill): inspect binaries, apps, and runtime behavior with evidence
+- **Ponytail plugin** (`@dietrichgebert/ponytail@latest`, default `full`): always-on lazy-senior-dev ruleset injected every turn via plugin hooks. Deliberately not vendored under `.opencode/skills/` — passive skills self-activate ~never, only the plugin injection produces measurable results.
+- **Skills for Real Engineers** (mattpocock/skills):
+  composable engineering workflows (grill → spec → tickets → implement + `tdd`)
 - **Rust Tooling**: Pre-configured clippy, rustfmt, and lints for code quality and formatting
 - **Specialized Review Agents** (`.opencode/agents/`):
   - `uncommitted-review`: General code quality review
@@ -43,36 +46,29 @@ Additional documentation is available in the `docs/` directory:
 - **docs/templates/CLAUDE.md**: Claude AI integration templates
 - **docs/unused-skills/**: Skills that are available but not currently active
 
-## Spec-Kit Slash Commands
+## Engineering Skills Workflow
 
-| Command | Example |
+| Step | Skill |
 | --- | --- |
-| `/speckit.constitution` | Create principles focused on code quality, testing standards, user experience consistency, and performance requirements |
-| `/speckit.specify` | Build an application that can help me organize my photos in separate photo albums. Albums are grouped by date and can be re-organized by dragging and dropping on the main page. Albums are never in other nested albums. Within each album, photos are previewed in a tile-like interface |
-| `/speckit.clarify` | Focus on the task card behavior: status changes, comment limits, and who can be assigned |
-| `/speckit.plan` | The application uses Vite with minimal number of libraries. Use vanilla HTML, CSS, and JavaScript as much as possible. Images are not uploaded anywhere and metadata is stored in a local SQLite database |
-| `/speckit.checklist` | Focus on the Kanban board interactions and comment permissions |
-| `/speckit.tasks` | — |
-| `/speckit.taskstoissues` | — |
-| `/speckit.analyze` | — |
-| `/speckit.implement` | Implement only the Setup and Foundational phases: project scaffolding and the project/task data model with basic CRUD. Stop before the user-story features |
-| `/speckit.converge` | — |
+| Set up repo (once) | `/setup-matt-pocock-skills` |
+| Sharpen an idea | `/grill-with-docs` (repo) or `/grill-me` (no repo) |
+| Only if too foggy for one session | `/wayfinder` (hands off to `/to-spec`) |
+| Spec the work | `/to-spec` |
+| Split into tickets | `/to-tickets` |
+| Build it | `/implement` (per ticket) or `/implement-spec` (whole spec) |
+| Improve the setup after a session | `/retro` |
 
-### Spec-Kit Extensions
+Optional — only when the situation calls for it:
 
-| Command               | Example                                                                              |
-| --------------------- | ------------------------------------------------------------------------------------ |
-| `/speckit.bug.assess` | "TypeError: cannot read properties of undefined (reading 'token') at /auth/callback" |
-| `/speckit.bug.fix`    | —                                                                                    |
-| `/speckit.bug.test`   | —                                                                                    |
-
-| Command                    | Example                                                |
-| -------------------------- | ------------------------------------------------------ |
-| `/speckit.assess.intake`   | "Let users work offline and sync when they reconnect." |
-| `/speckit.assess.research` | —                                                      |
-| `/speckit.assess.define`   | —                                                      |
-| `/speckit.assess.shape`    | —                                                      |
-| `/speckit.assess.decide`   | —                                                      |
+| Situation | Skill |
+| --- | --- |
+| Unsure which skill fits | `/ask-matt` |
+| Raw bugs/requests piling up | `/triage` (never for `/to-tickets` output) |
+| Spare moment for codebase health | `/improve-codebase-architecture` |
+| Move work across sessions | `/handoff` |
+| Blocked on someone else's input | `/to-questionnaire` |
+| Learn a topic | `/teach` |
+| A message didn't land | `/wait-what` |
 
 ## Configuration Files
 
@@ -80,8 +76,10 @@ Additional documentation is available in the `docs/` directory:
 
 Main configuration file for the opencode AI assistant, defining:
 
-- Plugin configuration (e.g. `@slkiser/opencode-quota` for usage tracking)
-- MCP server connections (e.g. `context7` for library documentation)
+- Plugin configuration (e.g. `@slkiser/opencode-quota` for usage tracking,
+  `@dietrichgebert/ponytail` for the always-on lazy-senior-dev ruleset)
+- MCP server connections: `context7` for library documentation, `rea` (`npx -y rea-agents@latest mcp`)
+  for reverse engineering
 - Agent and skill activation
 
 ### Rust Tooling

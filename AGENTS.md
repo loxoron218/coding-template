@@ -22,7 +22,7 @@ description: Senior Rust developer using modern idiomatic Rust and Libadwaita fo
 ## Codebase map (src/)
 
 - `benches/` — [criterion benchmarks]
-- `specs/` — [feature specs (FR-xxx)]
+- `docs/` — [skill docs from `/setup-matt-pocock-skills`]
 - `src/app.rs` — [bootstrap, runtime, lifecycle]
 - `src/[domain]/` — [capability/domain description]
 - `src/[domain]/` — [capability/domain description]
