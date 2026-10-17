@@ -1,8 +1,16 @@
 # Initialize Rust (skip when already initialized)
 [ -f Cargo.toml ] || cargo init
 
-# Install mattpocock/skills for opencode
-npx -y skills@latest add mattpocock/skills -a opencode -s '*' -y
+# Install mattpocock/skills user-wide
+TARGET="/home/$(whoami)/.config/opencode"
+npx -y skills@latest add mattpocock/skills -a opencode -s '*' -y -g
+if [ -n "$(ls -A "$HOME/.agents/skills" 2>/dev/null)" ]; then
+  rm -rf "$TARGET/skills"
+fi
+mkdir -p "$TARGET/skills"
+cp -r "$HOME/.agents/skills/." "$TARGET/skills/"
+rm -rf "$HOME/.agents/skills" "$HOME/.agents/.skill-lock.json"
+rmdir "$HOME/.agents" 2>/dev/null || true
 
 # Copy template files from coding-template and merge .opencode
 # (AGENTS.md is project-specific: keep existing. Everything else reverts to defaults.)
@@ -18,7 +26,6 @@ grep -q '^\[lints' Cargo.toml 2>/dev/null || cat lints.toml >> Cargo.toml
 rm -f lints.toml
 
 # Merge opencode files to home
-TARGET="/home/$(whoami)/.config/opencode"
 mkdir -p "$TARGET"
 cp -r ./.opencode/. "$TARGET"
 rm -rf ./.opencode
