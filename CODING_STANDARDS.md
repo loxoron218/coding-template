@@ -88,6 +88,7 @@ pub mod database;
 ### Commands
 
 ```bash
+cargo collate # project hygiene checks (must pass before committing)
 cargo clippy --fix --allow-dirty --all-targets --all-features && cargo fmt
 cargo test    # all tests must pass before committing
 cargo bench   # benchmarks

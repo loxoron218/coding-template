@@ -1,6 +1,9 @@
 # Initialize Rust (skip when already initialized)
 [ -f Cargo.toml ] || cargo init
 
+# Install project hygiene checker
+cargo install --force cargo-collate
+
 # Install mattpocock/skills user-wide
 TARGET="/home/$(whoami)/.config/opencode"
 npx -y skills@latest add mattpocock/skills -a opencode -s '*' -y -g
