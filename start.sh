@@ -1,6 +1,19 @@
 # Initialize Rust (skip when already initialized)
 [ -f Cargo.toml ] || cargo init
 
+# Use shared global cargo target dir for all projects (idempotent, no TOML parsing)
+mkdir -p "$HOME/.cargo" "$HOME/.cache/cargo-target"
+CARGO_CONFIG="$HOME/.cargo/config.toml"
+if [ ! -f "$CARGO_CONFIG" ]; then
+  printf '[build]\ntarget-dir = "%s/.cache/cargo-target"\n' "$HOME" > "$CARGO_CONFIG"
+elif ! grep -q 'target-dir' "$CARGO_CONFIG" 2>/dev/null; then
+  if grep -q '^\[build\]' "$CARGO_CONFIG"; then
+    echo "Note: add target-dir to $CARGO_CONFIG manually (existing [build] section kept untouched)"
+  else
+    printf '\n[build]\ntarget-dir = "%s/.cache/cargo-target"\n' "$HOME" >> "$CARGO_CONFIG"
+  fi
+fi
+
 # Install project hygiene checker
 cargo install --force cargo-collate
 
