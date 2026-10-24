@@ -1,6 +1,6 @@
 # Coding Template
 
-A modern project template for building applications with opencode AI assistance and
+A modern project template for building applications with pi AI assistance and
 mattpocock/skills engineering workflows.
 
 ## Quick Start
@@ -14,23 +14,23 @@ curl -L https://raw.githubusercontent.com/loxoron218/coding-template/refs/heads/
 This script will:
 
 - Clone the template repository
-- Move opencode configuration to your home directory
+- Move pi configuration to your home directory
 - Initialize a Rust project
-- Install mattpocock/skills for opencode
+- Install mattpocock/skills user-wide
+- Install the lean pi extensions user-wide
 
 ## Features
 
-- **opencode Integration**: Pre-configured AI coding assistant with multiple model support
-- **REA reverse engineering** (`rea-agents@latest` local MCP `rea` + `reverse-engineer-anything` skill): inspect binaries, apps, and runtime behavior with evidence
-- **Ponytail plugin** (`@dietrichgebert/ponytail@latest`, default `full`): always-on lazy-senior-dev ruleset injected every turn via plugin hooks. Deliberately not vendored under `.opencode/skills/` — passive skills self-activate ~never, only the plugin injection produces measurable results.
+- **pi Integration**: Pre-configured AI coding assistant with lean token-efficient extensions (see `my-lean-pi-setup`)
+- **REA reverse engineering** (`rea-agents@latest` local MCP `rea`): inspect binaries, apps, and runtime behavior with evidence, via `pi/mcp.json`
+- **Ponytail** (`@dietrichgebert/ponytail@latest`, default `full`): always-on lazy-senior-dev ruleset (`/ponytail lite|full|ultra|off`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-gain`, `/ponytail-debt`). The template `AGENTS.md` carries the same spirit project-side.
 - **Skills for Real Engineers** (mattpocock/skills):
   composable engineering workflows (grill → spec → tickets → implement + `tdd`)
 - **Rust Tooling**: Pre-configured clippy, rustfmt, and lints for code quality and formatting
-- **Specialized Review Agents** (`.opencode/agents/`):
-  - `uncommitted-review`: General code quality review
-- **Slash Commands** (`.opencode/command/`):
+- **Slash Commands** (`pi/prompts/`):
   - `uncommitted-review`: General code quality review with focus on maintainability
-- **Active Development Skills** (`.opencode/skills/`):
+  - `benchmaxx*`: Iterative Rust benchmarking prompts
+- **Active Development Skills** (`pi/skills/`):
   - `m10-performance`: Systematic performance optimization techniques
   - `sql-optimization-patterns`: Database query optimization strategies
 - **Inactive Skills** (`docs/unused-skills/`): code-review-excellence, frontend-design,
@@ -72,15 +72,16 @@ Optional — only when the situation calls for it:
 
 ## Configuration Files
 
-### opencode Configuration (`.opencode/opencode.json`)
+### pi Configuration (`pi/`)
 
-Main configuration file for the opencode AI assistant, defining:
+`start.sh` copies project `pi/` into your home directory (`~/.pi/agent/`) and removes
+the project copy (template is authoritative — re-running resets to defaults):
 
-- Plugin configuration (e.g. `@slkiser/opencode-quota` for usage tracking,
-  `@dietrichgebert/ponytail` for the always-on lazy-senior-dev ruleset)
-- MCP server connections: `context7` for library documentation, `rea` (`npx -y rea-agents@latest mcp`)
-  for reverse engineering
-- Agent and skill activation
+- MCP server connections (`pi/mcp.json`): `rea` (`npx -y rea-agents@latest mcp`) for reverse engineering
+- Prompt templates (`pi/prompts/`) and skills (`pi/skills/`)
+- Extensions from `pi/settings.json` (lean set from `my-lean-pi-setup` plus
+  `@dietrichgebert/ponytail@latest`)
+- Agent and skill activation via `~/.agents/skills/` (pi reads it natively)
 
 ### Rust Tooling
 
@@ -102,10 +103,9 @@ The template includes pre-configured Rust development tools:
 
 ```
 .
-├── .opencode/                                        # opencode AI assistant configuration
-│   ├── agents/                                       # Specialized review agents
-│   │   └── uncommitted-review.md                     # General code quality review
-│   ├── command/                                      # Slash command implementations
+├── pi/                                               # pi AI assistant configuration (copied to ~/.pi/agent by start.sh)
+│   ├── prompts/                                      # Slash command implementations
+│   │   ├── benchmaxx*.md                             # Iterative Rust benchmarking prompts
 │   │   └── uncommitted-review.md                     # General code quality review
 │   ├── skills/                                       # Active development skills
 │   │   ├── m10-performance/                          # Performance optimization skill
@@ -114,7 +114,8 @@ The template includes pre-configured Rust development tools:
 │   │   │   └── SKILL.md
 │   │   └── sql-optimization-patterns/
 │   │       └── SKILL.md                              # SQL query optimization
-│   └── opencode.json                                 # Main opencode configuration
+│   ├── settings.json                                 # pi extensions
+│   └── mcp.json                                      # MCP servers (rea)
 ├── AGENTS.md                                         # Agent configuration documentation
 ├── clippy.toml                                       # Rust linter configuration
 ├── CODING_STANDARDS.md                               # Coding standards and conventions

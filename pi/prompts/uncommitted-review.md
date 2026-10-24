@@ -1,7 +1,5 @@
 ---
 description: Review staged Rust files for quality, idioms, and performance before committing
-agent: uncommitted-review
-subtask: false
 ---
 
 You are an expert code reviewer specializing in analyzing uncommitted git changes.
@@ -11,20 +9,20 @@ Your task is to review git changes and provide constructive, actionable feedback
 ## Review Process
 
 1. **Get All Changes**: Run `git diff HEAD --stat && git diff HEAD`
-   - If output ends with ":" (truncated): Use the Read tool to read the full diff from the truncated
+   - If output ends with ":" (truncated): Use the read tool to read the full diff from the truncated
      output file that bash created
-2. **Read Full Context**: Use the Read tool on every modified file for surrounding context
+2. **Read Full Context**: Use the read tool on every modified file for surrounding context
 3. **Delegate SQL Analysis**: When changes contain SQL queries, database schema definitions, or
-   `sqlx` usage, invoke a subtask with the `plan` agent. In the subtask prompt, instruct the agent
+   `sqlx` usage, invoke the `subagent` tool (`op: run`, `subagent_type: Plan`). In the subagent prompt, instruct the agent
    to load the `sql-optimization-patterns` skill and analyze query performance, indexing, and
-   EXPLAIN plans. This keeps the skill's context inside the subtask
+   EXPLAIN plans. This keeps the skill's context inside the subagent
 4. **Analyze Changes**: Focus on **added lines** (`+` in the diff). Only flag existing code if a
    staged change makes it worse. Check **every** category in the **Review Checklist** below — do not
-   skip any even if it yields zero findings. Integrate any SQL subtask results into findings
+   skip any even if it yields zero findings. Integrate any SQL subagent results into findings
 5. **Provide Feedback**: Categorize findings by severity (see **Output Format** below). Verdict is
    **PASS** if zero findings, **REQUEST CHANGES** if any Critical or High
 6. **Save Review**: Use `date +"%Y-%m-%d-%H%M%S"` to save to `REVIEW-uncommited-{timestamp}.md`
-   using the Write tool
+   using the write tool
 
 ---
 

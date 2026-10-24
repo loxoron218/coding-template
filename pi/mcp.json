@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "rea": {
+      "command": "npx",
+      "args": ["-y", "rea-agents@latest", "mcp"],
+      "env": {
+        "REA_MCP_INPUT_SCHEMA_PROFILE": "compact"
+      },
+      "exposure": "codemode",
+      "enabled": false,
+      "description": "Reverse-engineering tools (REA). Reach only via codemode scripts, not direct tools."
+    }
+  }
+}

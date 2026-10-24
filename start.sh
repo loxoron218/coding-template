@@ -18,8 +18,8 @@ fi
 cargo install --force cargo-collate
 
 # Install mattpocock/skills user-wide
-TARGET="/home/$(whoami)/.config/opencode"
-npx -y skills@latest add mattpocock/skills -a opencode -s '*' -y -g
+TARGET="/home/$(whoami)/.pi/agent"
+npx -y skills@latest add mattpocock/skills -a pi -s '*' -y -g
 if [ -n "$(ls -A "$HOME/.agents/skills" 2>/dev/null)" ]; then
   rm -rf "$TARGET/skills"
 fi
@@ -28,13 +28,13 @@ cp -r "$HOME/.agents/skills/." "$TARGET/skills/"
 rm -rf "$HOME/.agents/skills" "$HOME/.agents/.skill-lock.json"
 rmdir "$HOME/.agents" 2>/dev/null || true
 
-# Copy template files from coding-template and merge .opencode
+# Copy template files from coding-template and merge pi
 # (AGENTS.md is project-specific: keep existing. Everything else reverts to defaults.)
 TEMP_DIR=$(mktemp -d)
 git clone https://github.com/loxoron218/coding-template.git "$TEMP_DIR"
 [ -f AGENTS.md ] || cp "$TEMP_DIR/AGENTS.md" .
 cp "$TEMP_DIR"/clippy.toml "$TEMP_DIR"/CODING_STANDARDS.md "$TEMP_DIR"/LICENSE "$TEMP_DIR"/rustfmt.toml "$TEMP_DIR"/lints.toml .
-cp -r "$TEMP_DIR"/.opencode/. ./.opencode/
+cp -r "$TEMP_DIR"/.pi/. ./.pi/
 rm -rf "$TEMP_DIR"
 
 # Sync lints from lints.toml to Cargo.toml (idempotent, template is authoritative)
@@ -48,10 +48,27 @@ sed -i -e :a -e '/^\n*$/{$d;N;ba' -e '}' Cargo.toml
 cat lints.toml >> Cargo.toml
 rm -f lints.toml
 
-# Merge opencode files to home
-mkdir -p "$TARGET"
-cp -r ./.opencode/. "$TARGET"
-rm -rf ./.opencode
+# Merge pi files to home (user-wide, no project pi/ left behind — template is authoritative)
+PI_AGENT="/home/$(whoami)/.pi/agent"
+mkdir -p "$PI_AGENT"
+cp -r ./pi/. "$PI_AGENT/"
+rm -rf ./pi
+
+# User-wide pi wrapper: lean tool selection for sessions, subcommands untouched (idempotent)
+mkdir -p "$HOME/.local/bin"
+cat > "$HOME/.local/bin/pi" <<'EOF'
+#!/bin/sh
+# Subcommands must stay argv[1]; global flags before them break parsing.
+case "$1" in
+  install|remove|uninstall|update|list|config|auth|mcp|-h|--help|-v|--version)
+    exec /usr/bin/pi "$@"
+    ;;
+  *)
+    exec /usr/bin/pi --exclude-tools powershell,grep,find,ls "$@"
+    ;;
+esac
+EOF
+chmod +x "$HOME/.local/bin/pi"
 
 # Removes the script file after completion
 rm "$0"

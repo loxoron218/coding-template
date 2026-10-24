@@ -1,0 +1,19 @@
+{
+  "$schema": "https://pi.dev/schemas/settings.schema.json",
+  "packages": [
+    { "source": "npm:@ssk_dev/pi-docs-slim@latest" },
+    { "source": "npm:@ssk_dev/pi-subagents-lean@latest" },
+    { "source": "npm:@ssk_dev/pi-web-access-lean@latest" },
+    { "source": "npm:@ssk_dev/rpiv-ask-user-question-lean@latest" },
+    { "source": "npm:@ssk_dev/rpiv-todo-lean@latest" },
+    { "source": "npm:billion-context-pi-lean@latest" },
+    { "source": "npm:pi-context-view-lean@latest" },
+    { "source": "npm:ponytail-lean@latest" },
+    { "source": "npm:pi-usage-lean@latest" },
+    { "source": "npm:pi-plan-mode-lean@latest" },
+    { "source": "npm:pi-zentui-lean@latest" },
+    { "source": "npm:pi-workspace-history-lean@latest" },
+    { "source": "npm:pi-system-prompt-lean@latest" },
+    { "source": "npm:pi-deep-research-lean@latest" }
+  ]
+}
