@@ -17,6 +17,7 @@ fi
 # Install project hygiene checker and nextest test runner
 cargo install --force cargo-collate
 cargo install cargo-nextest
+cargo install cargo-edit
 
 # Install mattpocock/skills user-wide
 TARGET="/home/$(whoami)/.pi/agent"

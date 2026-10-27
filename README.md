@@ -98,6 +98,7 @@ The template includes pre-configured Rust development tools:
   - Enables unstable features
 
 - **lints.toml**: Configures project-wide lints for additional code quality rules
+- **cargo-edit** (`cargo upgrade --incompatible && cargo update`): upgrades `Cargo.toml` reqs to latest, including breaking majors
 
 ## Project Structure
 
