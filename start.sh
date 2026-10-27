@@ -14,8 +14,9 @@ elif ! grep -q 'target-dir' "$CARGO_CONFIG" 2>/dev/null; then
   fi
 fi
 
-# Install project hygiene checker
+# Install project hygiene checker and nextest test runner
 cargo install --force cargo-collate
+cargo install cargo-nextest
 
 # Install mattpocock/skills user-wide
 TARGET="/home/$(whoami)/.pi/agent"
@@ -34,6 +35,9 @@ TEMP_DIR=$(mktemp -d)
 git clone https://github.com/loxoron218/coding-template.git "$TEMP_DIR"
 [ -f AGENTS.md ] || cp "$TEMP_DIR/AGENTS.md" .
 cp "$TEMP_DIR"/clippy.toml "$TEMP_DIR"/CODING_STANDARDS.md "$TEMP_DIR"/LICENSE "$TEMP_DIR"/rustfmt.toml "$TEMP_DIR"/lints.toml .
+mkdir -p .config .cargo
+cp "$TEMP_DIR/.config/nextest.toml" .config/nextest.toml
+cp "$TEMP_DIR/.cargo/config.toml" .cargo/config.toml
 cp -r "$TEMP_DIR"/.pi/. ./.pi/
 rm -rf "$TEMP_DIR"
 
