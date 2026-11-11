@@ -29,7 +29,7 @@ This script will:
 - **Rust Tooling**: Pre-configured clippy, rustfmt, and lints for code quality and formatting
 - **Slash Commands** (`pi/prompts/`):
   - `uncommitted-review`: General code quality review with focus on maintainability
-  - `benchmaxx*`: Iterative Rust benchmarking prompts
+  - `benchmaxx*`: Iterative Rust benchmarking prompts (pass focus after the command, e.g. `/benchmaxx the dynamic range scanning code`)
 - **Active Development Skills** (`pi/skills/`):
   - `m10-performance`: Systematic performance optimization techniques
   - `sql-optimization-patterns`: Database query optimization strategies

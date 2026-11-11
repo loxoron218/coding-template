@@ -1,5 +1,6 @@
 ---
 description: Verbatim competition prompt from https://minimaxir.com/2026/09/agentic-iteration/
+argument-hint: "[competitors or focus area]"
 ---
 
 Create an additional comparison script containing **atleast 10** `criterion` benchmarks which compare the performance speed and quality metrics between this crate and the following crates:
@@ -18,3 +19,7 @@ These benchmarks **ALL MUST**:
 Then, optimize the Rust library code such that this crate MUST be:
 
 - **atleast 2.0x faster** than **ALL** competing Rust crates in all benchmarks on apples-to-apples comparisons; ideally as fast as possible.
+
+## User-supplied focus
+
+${ARGUMENTS:-None — apply the prompt as written.}

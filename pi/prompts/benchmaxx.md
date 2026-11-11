@@ -1,5 +1,6 @@
 ---
 description: Ur-Prompt for iterative Rust benchmarking from https://minimaxir.com/2026/09/agentic-iteration/, adapted for pi
+argument-hint: "[focus area]"
 ---
 
 Optimize the Rust code in this Rust crate to its maximum potential. Specifically, **you MUST make a breakthrough from this current implementation** that uses modern concepts and knowledge as of 2026 to further improve this crate **without causing ANY significant regressions**.
@@ -25,3 +26,7 @@ You may consider using profiling areas of the codebase to find specific areas an
 You may use ANY techniques to do achieve the specified metric constraint (e.g. import new crates, add tuning profiles which are active for larger data) other than adding `unsafe` code. **REPEAT THIS PROCESS UNTIL BENCHMARK PERFORMANCE CONVERGES AND YOU ARE OUT OF OPTIMIZATION IDEAS.** You have permission to keep iterating. After each benchmark iteration, return the absolute and relative results to the True Performance Baseline to the user as a Markdown table.
 
 Prioritize making quick/high-impact wins iteratively and making changes accordingly. Do not overthink the necessary changes.
+
+## User-supplied focus
+
+${ARGUMENTS:-None — apply the prompt as written.}
