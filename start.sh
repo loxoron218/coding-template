@@ -28,8 +28,14 @@ cp "$TEMP_DIR"/clippy.toml "$TEMP_DIR"/LICENSE "$TEMP_DIR"/rustfmt.toml "$TEMP_D
 mkdir -p .config .cargo
 cp "$TEMP_DIR/.config/nextest.toml" .config/nextest.toml
 cp "$TEMP_DIR/.cargo/config.toml" .cargo/config.toml
-cp -r "$TEMP_DIR"/.pi/. ./.pi/
+
+# Merge pi files to home (user-wide, no project pi/ left behind — template is authoritative)
+PI_AGENT="$HOME/.pi/agent"
+mkdir -p "$PI_AGENT"
+cp -r "$TEMP_DIR"/pi/. "$PI_AGENT/"
 rm -rf "$TEMP_DIR"
+if [ -d ./pi ]; then cp -r ./pi/. "$PI_AGENT/"; rm -rf ./pi; fi
+rm -rf ./.pi
 
 # Sync lints from lints.toml to Cargo.toml (idempotent, template is authoritative)
 awk '
@@ -41,12 +47,6 @@ sed -i -e :a -e '/^\n*$/{$d;N;ba' -e '}' Cargo.toml
 [ -n "$(tail -c1 Cargo.toml)" ] && printf '\n' >> Cargo.toml
 cat lints.toml >> Cargo.toml
 rm -f lints.toml
-
-# Merge pi files to home (user-wide, no project pi/ left behind — template is authoritative)
-PI_AGENT="/home/$(whoami)/.pi/agent"
-mkdir -p "$PI_AGENT"
-cp -r ./pi/. "$PI_AGENT/"
-rm -rf ./pi
 
 # User-wide pi wrapper: lean tool selection for sessions, subcommands untouched (idempotent)
 mkdir -p "$HOME/.local/bin"
