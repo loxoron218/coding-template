@@ -19,23 +19,12 @@ cargo install --force cargo-collate
 cargo install cargo-nextest
 cargo install cargo-edit
 
-# Install mattpocock/skills user-wide
-TARGET="/home/$(whoami)/.pi/agent"
-npx -y skills@latest add mattpocock/skills -a pi -s '*' -y -g
-if [ -n "$(ls -A "$HOME/.agents/skills" 2>/dev/null)" ]; then
-  rm -rf "$TARGET/skills"
-fi
-mkdir -p "$TARGET/skills"
-cp -r "$HOME/.agents/skills/." "$TARGET/skills/"
-rm -rf "$HOME/.agents/skills" "$HOME/.agents/.skill-lock.json"
-rmdir "$HOME/.agents" 2>/dev/null || true
-
 # Copy template files from coding-template and merge pi
 # (AGENTS.md is project-specific: keep existing. Everything else reverts to defaults.)
 TEMP_DIR=$(mktemp -d)
 git clone https://github.com/loxoron218/coding-template.git "$TEMP_DIR"
 [ -f AGENTS.md ] || cp "$TEMP_DIR/AGENTS.md" .
-cp "$TEMP_DIR"/clippy.toml "$TEMP_DIR"/CODING_STANDARDS.md "$TEMP_DIR"/LICENSE "$TEMP_DIR"/rustfmt.toml "$TEMP_DIR"/lints.toml .
+cp "$TEMP_DIR"/clippy.toml "$TEMP_DIR"/LICENSE "$TEMP_DIR"/rustfmt.toml "$TEMP_DIR"/lints.toml .
 mkdir -p .config .cargo
 cp "$TEMP_DIR/.config/nextest.toml" .config/nextest.toml
 cp "$TEMP_DIR/.cargo/config.toml" .cargo/config.toml
