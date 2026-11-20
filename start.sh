@@ -58,6 +58,7 @@ case "$1" in
     exec /usr/bin/pi "$@"
     ;;
   *)
+    clear
     exec /usr/bin/pi --exclude-tools powershell,grep,find,ls "$@"
     ;;
 esac
