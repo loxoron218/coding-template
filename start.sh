@@ -29,13 +29,17 @@ mkdir -p .config .cargo
 cp "$TEMP_DIR/.config/nextest.toml" .config/nextest.toml
 cp "$TEMP_DIR/.cargo/config.toml" .cargo/config.toml
 
-# Merge pi files to home (user-wide, no project pi/ left behind — template is authoritative)
+# Merge pi files to home (user-wide, no project pi/ left behind).
+# prompts/skills follow the template; settings.json/mcp.json are only installed
+# when missing, so re-running never wipes favorites, scoped models, or extra servers.
 PI_AGENT="$HOME/.pi/agent"
-mkdir -p "$PI_AGENT"
-cp -r "$TEMP_DIR"/pi/. "$PI_AGENT/"
+mkdir -p "$PI_AGENT/prompts" "$PI_AGENT/skills"
+cp -r "$TEMP_DIR"/pi/prompts/. "$PI_AGENT/prompts/"
+cp -r "$TEMP_DIR"/pi/skills/. "$PI_AGENT/skills/"
+[ -f "$PI_AGENT/settings.json" ] || cp "$TEMP_DIR"/pi/settings.json "$PI_AGENT/settings.json"
+[ -f "$PI_AGENT/mcp.json" ] || cp "$TEMP_DIR"/pi/mcp.json "$PI_AGENT/mcp.json"
 rm -rf "$TEMP_DIR"
-if [ -d ./pi ]; then cp -r ./pi/. "$PI_AGENT/"; rm -rf ./pi; fi
-rm -rf ./.pi
+rm -rf ./pi ./.pi
 
 # Sync lints from lints.toml to Cargo.toml (idempotent, template is authoritative)
 awk '

@@ -47,7 +47,8 @@ Additional documentation is available in the `docs/` directory:
 ### pi Configuration (`pi/`)
 
 `start.sh` copies project `pi/` into your home directory (`~/.pi/agent/`) and removes
-the project copy (template is authoritative — re-running resets to defaults):
+the project copy (prompts/skills follow the template; `settings.json`/`mcp.json`
+are only installed when missing, so re-running keeps your favorites, scoped models, and extra MCP servers):
 
 - MCP server connections (`pi/mcp.json`): `rea` (`npx -y rea-agents@latest mcp`) for reverse engineering
 - Prompt templates (`pi/prompts/`) and skills (`pi/skills/`)
